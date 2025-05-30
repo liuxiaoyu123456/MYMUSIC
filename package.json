@@ -1,0 +1,44 @@
+{
+  "name": "mymusic",
+  "private": true,
+  "version": "0.0.0",
+  "main": "background.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "electron:serve": "vite --host",
+    "electron:build": "vite build && electron-builder"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/vue-fontawesome": "^3.0.8",
+    "buffer": "^6.0.3",
+    "electron": "^36.3.2",
+    "electron-builder": "^26.0.12",
+    "electron-devtools-installer": "^4.0.0",
+    "font-awesome": "^4.7.0",
+    "howler": "^2.2.4",
+    "music-metadata-browser": "^2.5.11",
+    "pinia": "^3.0.2",
+    "pinia-plugin-persistedstate": "^4.3.0",
+    "vite-plugin-electron": "^0.29.0",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.1",
+    "vuestic-ui": "^1.10.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.23",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "@vue/tsconfig": "^0.7.0",
+    "material-design-icons-iconfont": "^6.7.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5",
+    "vite-plugin-commonjs": "^0.10.4",
+    "vite-plugin-require-transform": "^1.0.21",
+    "vue-tsc": "^2.2.8"
+  }
+}
