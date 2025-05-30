@@ -1,5 +1,13 @@
-# Vue 3 + TypeScript + Vite
+# MYMUSIC
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+> 一款基于Vue3 + ts + vite + Electron的桌面音乐播放器应用
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## 开发语言
+
+- 项目采用Vue3框架 + Typescript语言 + Electron进行开发，支持客户端
+- 使用UI组件库为Vuestic
+
+## 功能
+
+- [×] 本地音乐播放
+- [ ] 在线音乐播放
