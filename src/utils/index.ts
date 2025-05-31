@@ -1,3 +1,5 @@
+import type { IPicture } from "music-metadata";
+
 export const getSize = (data: number) => {
     const seconds = parseInt(data as unknown as string);
     const hours = Math.floor(seconds / 3600); // 计算小时数
@@ -22,4 +24,16 @@ export function formatFileSizeInMB(bytes: number): string {
   }
   const megabytes = bytes / 1048576; // 1 MB = 1024 * 1024 bytes
   return megabytes.toFixed(2) + ' M'; // 返回格式化的字符串，保留两位小数
+}
+
+export const getImage = (pic: IPicture[])=> {
+  let picSrc = ''
+  if(pic && pic.length > 0) {
+    let base64String = "";
+    for (let i = 0; i < pic[0].data.length; i++) {
+      base64String += String.fromCharCode(pic[0].data[i]);
+    }
+    picSrc = "data:image/jpeg;base64," + window.btoa(base64String);
+  }
+  return picSrc;
 }

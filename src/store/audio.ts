@@ -1,11 +1,15 @@
 import { defineStore } from "pinia";
 import { Howl, Howler } from 'howler';
-import { ref } from "vue";
+
+interface myAudio {
+    sound: null | Howl,
+    paused: boolean,
+    volume: number,
+}
 
 export const useAudio = defineStore('audio', {
-    state: () => ({
+    state: (): myAudio  => ({
         sound: null,
-        isLocal: true,
         paused: true,
         volume: 1,
     }),
@@ -18,6 +22,25 @@ export const useAudio = defineStore('audio', {
                 loop: true,
                 volume: this.volume,
             })
+        },
+
+        playMusic() {
+            this.sound!.play();
+        },
+
+        stopMusic() {
+            if(this.sound) {
+                this.sound.stop();
+            }
+        },
+
+        pauseMusic() {
+            this.sound!.pause();
+        },
+
+        setVolume(vol: number) {
+            this.volume = vol;
+            this.sound.volume(vol);
         },
 
         changePause(val: boolean) {

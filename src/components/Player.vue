@@ -46,7 +46,7 @@
                         <div class="slider">
                             <VaSlider
                               track-label-visible
-                              v-model="soundProgress"
+                              v-model="volumeProgress"
                               @change="changeVolume"
                               vertical
                             />  
@@ -71,7 +71,6 @@
 import MenuList from '@/components/MenuList.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useAudio } from '@/store/audio';
-import { usePlayList } from '@/store/play-list';
 import { storeToRefs } from 'pinia';
 
 const emit = defineEmits<{
@@ -80,17 +79,11 @@ const emit = defineEmits<{
 
 const store = useAudio();
 
-const playStore = usePlayList();
+const { setVolume, playMusic, pauseMusic } = store;
 
-const { playSrc } = storeToRefs(playStore);
+const { paused, volume } = storeToRefs(store);
 
-const { createAudio } = store;
-
-const { paused, volume, sound } = storeToRefs(store);
-
-const myAudio = ref();
-
-const soundProgress = ref(volume.value*100);
+const volumeProgress = ref(volume.value*100);
 
 const open = () => {
     emit('open-list');
@@ -107,24 +100,17 @@ const options = [
 
 const control = () => {
     if(paused.value) {
-        myAudio.value.play();
+        playMusic();
         paused.value = false;
     }else {
-        myAudio.value.pause();
+        pauseMusic();
         paused.value = true;
     }
 }
 
-onMounted(()=>{
-    myAudio.value = document.getElementById("audio");
-})
-
 const changeVolume = () => {
-    volume.value = soundProgress.value/100;
-    myAudio.value.volume = volume.value;
+    setVolume(volumeProgress.value/100);
 }
-
-// console.log(sound.value);
 </script>
 <style scoped>
 .action {

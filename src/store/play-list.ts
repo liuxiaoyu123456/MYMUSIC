@@ -15,7 +15,7 @@ export const usePlayList = defineStore('play-list', {
             this.playList.push(item);
         },
 
-        selectIndex(num: number) {
+        selectItem(num: number) {
             if(this.playList.length > 0){
                 this.playSrc = this.playList[num].url;
             }

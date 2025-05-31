@@ -52,9 +52,9 @@ import { usePlayList } from '@/store/play-list';
 import { useAudio } from '@/store/audio';
 import { ref } from 'vue';
 
-const { selectIndex } = usePlayList();
+const { selectItem } = usePlayList();
 
-const { changePause } = useAudio();
+const { changePause, createAudio, playMusic, stopMusic } = useAudio();
 
 const value = ref(2);
 
@@ -76,7 +76,11 @@ const moreOptions = [
 const selectedItemsEmitted = ref([]);
 
 const selectPlay = (event: RowClickEvent) => {
-    selectIndex(event.itemIndex);
+    stopMusic();
+    selectItem(event.itemIndex);
+    const { playSrc } = usePlayList();
+    createAudio(playSrc);
+    playMusic();
     changePause(false);
 };
 

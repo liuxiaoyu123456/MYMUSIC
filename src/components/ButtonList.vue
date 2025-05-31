@@ -34,12 +34,12 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useAudio } from '@/store/audio';
 import { usePlayList } from '@/store/play-list';
 import { storeToRefs } from 'pinia';
 import { type IAudioMetadata } from 'music-metadata';
-import { getSize, formatFileSizeInMB } from '@/utils';
+import { getSize, formatFileSizeInMB, getImage } from '@/utils';
 
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -50,8 +50,6 @@ const { sound } = storeToRefs(store);
 const { createAudio } = store;
 
 const { addPlayItem } = usePlayList();
-
-const myAudio = ref<HTMLAudioElement | null>(null);
 
 const emit = defineEmits<{
     (e: 'batch-change', value: boolean): void,
@@ -65,7 +63,9 @@ const addFile = () => {
 
 // 监听文件名
 ipcRenderer.on('selected-file', (event: Event, selectedFilePath: string, file: IAudioMetadata, size: number) => {
-    
+    // 读取音频文件封面
+    const image = file.common.picture;
+    const picSrc = getImage(image);
     const item = {
         url: selectedFilePath,
         sing: file.common.title,
@@ -73,14 +73,11 @@ ipcRenderer.on('selected-file', (event: Event, selectedFilePath: string, file: I
         artist: file.common.artist,
         length: getSize(file.format.duration),
         size: formatFileSizeInMB(size),
+        picSrc: picSrc
     }
     // 添加到播放列表
     addPlayItem(item);
 });
-
-onMounted(()=>{
-    myAudio.value = document.getElementById("audio") as HTMLAudioElement;
-})
 
 watch(
     () => batchAction.value, (newValue) => {
