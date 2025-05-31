@@ -28,10 +28,12 @@
             <VaIcon v-else name="check_circle" color="success" />
         </template>
         <template #cell(action)="value">
-            <MenuList placement="right" :items="options">
+            <MenuList placement="right" :items="addOptions">
                 <VaButton @click="add" icon="add_circle_outline" preset="secondary"/>
             </MenuList>
-            <VaButton icon="more_horiz" preset="secondary"/>
+            <MenuList placement = "right" :items="moreOptions">
+                <VaButton @click="more($event, value.rowIndex)" icon="more_horiz" preset="secondary"/>
+            </MenuList>
         </template>
     </VaDataTable>
     <VaPagination
@@ -62,10 +64,14 @@ const props = defineProps<{
     select: boolean,
 }>();
 
-const options = [
+const addOptions = [
     { text: '我喜欢', value: 'like', icon: 'favorite_border' },
     { text: '播放列表', value: 'play_list', icon: 'playlist_play' }
 ];
+
+const moreOptions = [
+    { text: '删除', value: 'delete', icon: 'delete_outline' },
+]
 
 const selectedItemsEmitted = ref([]);
 
@@ -76,6 +82,11 @@ const selectPlay = (event: RowClickEvent) => {
 
 const add = (event: Event) => {
     event.stopPropagation();
+}
+
+const more = (event: Event, index: number) => {
+    event.stopPropagation();
+
 }
 </script>
 <style scoped>

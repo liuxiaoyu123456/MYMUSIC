@@ -1,6 +1,5 @@
 <template>
     <div class="player">
-        <audio id="audio" :src="playSrc" autoplay/>
         <div class="sing">
             <img class="sing-img" src="">
             <div class="info">
@@ -125,7 +124,7 @@ const changeVolume = () => {
     myAudio.value.volume = volume.value;
 }
 
-console.log(sound.value);
+// console.log(sound.value);
 </script>
 <style scoped>
 .action {

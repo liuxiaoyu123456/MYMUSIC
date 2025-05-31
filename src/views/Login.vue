@@ -61,7 +61,6 @@ const { validate } = useForm('Login');
 const login = () => {
     // $vaToast.init({ message: '用户名或者密码有误', color: 'danger' })
     validate();
-    console.log(1);
 }
 </script>
 <style scoped>

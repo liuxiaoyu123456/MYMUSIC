@@ -16,7 +16,7 @@ export const useAudio = defineStore('audio', {
                 src: [url],
                 autoplay: true,
                 loop: true,
-                volume: 0.5,
+                volume: this.volume,
             })
         },
 

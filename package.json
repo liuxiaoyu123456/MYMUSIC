@@ -22,6 +22,7 @@
     "electron-devtools-installer": "^4.0.0",
     "font-awesome": "^4.7.0",
     "howler": "^2.2.4",
+    "music-metadata": "^11.2.3",
     "music-metadata-browser": "^2.5.11",
     "pinia": "^3.0.2",
     "pinia-plugin-persistedstate": "^4.3.0",

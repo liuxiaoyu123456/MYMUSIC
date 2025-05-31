@@ -14,10 +14,15 @@ export const usePlayList = defineStore('play-list', {
         addPlayItem(item) {
             this.playList.push(item);
         },
+
         selectIndex(num: number) {
             if(this.playList.length > 0){
                 this.playSrc = this.playList[num].url;
             }
+        },
+
+        deleteItem(num: number) {
+            this.playList.splice(num, 1);
         }
     },
 
