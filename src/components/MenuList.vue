@@ -5,21 +5,19 @@
         </template>
         <VaMenuItem v-for="item in props.items" @selected="emit('change-select', item)">
             <div class="item">
-                <VaIcon :name="item.icon"/>
+                <VaIcon v-if="item.icon" :name="item.icon"/>
+                <font-awesome-icon v-else :icon="item.fa" />
                 <span class="item-text">{{ item.text }}</span>
             </div>
         </VaMenuItem>
     </VaMenu>
 </template>
 <script setup lang="ts">
-import { useToast } from 'vuestic-ui';
 const props = defineProps<{ items: any[] }>();
 
 const emit = defineEmits<{
     ( e: 'change-select', val: any ): void,
 }>();
-
-const vaToast = useToast();
 </script>
 <style scoped>
 .item {

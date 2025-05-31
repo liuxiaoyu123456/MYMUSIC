@@ -32,7 +32,8 @@
     "vuestic-ui": "^1.10.3"
   },
   "devDependencies": {
-    "@types/node": "^22.15.23",
+    "@types/howler": "^2.2.12",
+    "@types/node": "^22.15.29",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vue/tsconfig": "^0.7.0",
     "material-design-icons-iconfont": "^6.7.0",

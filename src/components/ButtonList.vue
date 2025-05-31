@@ -3,7 +3,7 @@
         <!-- <audio :src="url" autoplay></audio> -->
         <div class="left">
             <VaButton class="btn" round icon="play_arrow" preset="primary">播放</VaButton>
-            <VaButton class="btn" round icon="download" preset="primary">下载</VaButton>
+            <!-- <VaButton class="btn" round icon="download" preset="primary">下载</VaButton> -->
             <VaButton class="btn" round icon="add_circle_outline" preset="primary" @click="addFile">添加</VaButton>
             <VaButton class="btn" round icon="checklist" preset="primary" @click="batchAction = true;">批量</VaButton>
         </div>
@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useAudio } from '@/store/audio';
-import { usePlayList } from '@/store/play-list';
+import { usePlayList } from '@/store/play';
 import { storeToRefs } from 'pinia';
 import { type IAudioMetadata } from 'music-metadata';
 import { getSize, formatFileSizeInMB, getImage } from '@/utils';
@@ -65,13 +65,13 @@ const addFile = () => {
 ipcRenderer.on('selected-file', (event: Event, selectedFilePath: string, file: IAudioMetadata, size: number) => {
     // 读取音频文件封面
     const image = file.common.picture;
-    const picSrc = getImage(image);
+    const picSrc = getImage(image!);
     const item = {
         url: selectedFilePath,
         sing: file.common.title,
         column: file.common.album,
         artist: file.common.artist,
-        length: getSize(file.format.duration),
+        length: getSize(file.format.duration!),
         size: formatFileSizeInMB(size),
         picSrc: picSrc
     }

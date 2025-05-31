@@ -1,7 +1,7 @@
 <template>
     <div class="home">
        <div class="main">
-            <SiderBar style="z-index: 0;"/>
+            <SiderBar/>
             <div class="conten-box">
                 <div class="header">
                     <Search/>
@@ -123,6 +123,7 @@ const onMin = () => {
 }
 .content {
     padding: 16px 24px;
+    height: calc(100% - 68px);
 }
 button {
     -webkit-app-region: no-drag;

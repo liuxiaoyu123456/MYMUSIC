@@ -31,7 +31,7 @@
             <MenuList placement="right" :items="addOptions">
                 <VaButton @click="add" icon="add_circle_outline" preset="secondary"/>
             </MenuList>
-            <MenuList placement = "right" :items="moreOptions">
+            <MenuList placement = "right" :items="moreOptions" @change-select="moreAction">
                 <VaButton @click="more($event, value.rowIndex)" icon="more_horiz" preset="secondary"/>
             </MenuList>
         </template>
@@ -48,15 +48,17 @@
 </template>
 <script setup lang="ts">
 import MenuList from '@/components/MenuList.vue';
-import { usePlayList } from '@/store/play-list';
+import { usePlayList } from '@/store/play';
 import { useAudio } from '@/store/audio';
 import { ref } from 'vue';
 
-const { selectItem } = usePlayList();
+const { selectItem, deleteItem } = usePlayList();
 
-const { changePause, createAudio, playMusic, stopMusic } = useAudio();
+const { createAudio, playMusic, stopMusic } = useAudio();
 
-const value = ref(2);
+const value = ref(1);
+
+const actionIndex = ref(0);
 
 const props = defineProps<{ 
     items: any[],
@@ -81,7 +83,6 @@ const selectPlay = (event: RowClickEvent) => {
     const { playSrc } = usePlayList();
     createAudio(playSrc);
     playMusic();
-    changePause(false);
 };
 
 const add = (event: Event) => {
@@ -90,7 +91,13 @@ const add = (event: Event) => {
 
 const more = (event: Event, index: number) => {
     event.stopPropagation();
+    actionIndex.value = index;
+}
 
+const moreAction = (item) => {
+    if(item.value === 'delete') {
+        deleteItem(actionIndex.value);
+    }
 }
 </script>
 <style scoped>

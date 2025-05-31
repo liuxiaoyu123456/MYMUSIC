@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Howl, Howler } from 'howler';
+import { Howl } from 'howler';
 
 interface myAudio {
     sound: null | Howl,
@@ -26,6 +26,7 @@ export const useAudio = defineStore('audio', {
 
         playMusic() {
             this.sound!.play();
+            this.paused = false;
         },
 
         stopMusic() {
@@ -36,15 +37,12 @@ export const useAudio = defineStore('audio', {
 
         pauseMusic() {
             this.sound!.pause();
+            this.paused = true;
         },
 
         setVolume(vol: number) {
             this.volume = vol;
-            this.sound.volume(vol);
+            this.sound!.volume(vol);
         },
-
-        changePause(val: boolean) {
-            this.paused = val;
-        }
     }
 })

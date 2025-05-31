@@ -1,9 +1,12 @@
 <template>
     <div class="player">
         <div class="sing">
-            <img class="sing-img" src="">
+            <img class="sing-img" :src="playCover">
             <div class="info">
-                <div class="name">随意-刘晓宇</div>
+                <div class="name">
+                    <span>{{ singName }}</span>
+                    <span class="singer">-{{ singArtist }}</span>
+                </div>
                 <div class="btn-list">
                     <VaButton preset="secondary" icon="favorite_border" size="small"/>
                     <VaBadge overlap text="5" style="--va-badge-text-wrapper-border-radius: 50%;">
@@ -17,9 +20,16 @@
         </div>
         <div class="center">
             <div class="play">
-                <VaButton size="large" preset="secondary" icon="loop"/>
+                <MenuList placement="top" :items="playModeOptions" @change-select="selectPlayMode">
+                    <VaButton preset="secondary" size="large">
+                        <template #append>
+                            <font-awesome-icon v-if="playModeIcon.split('-')[0] === 'fa'" :icon="playModeIcon" />
+                            <VaIcon v-else :name="playModeIcon" size="large"/>
+                        </template>
+                    </VaButton>
+                </MenuList>
                 <div class="action">
-                    <VaButton preset="plain" size="large">
+                    <VaButton @click="prev" preset="plain" size="large">
                         <template #append>
                             <font-awesome-icon icon="fa-solid fa-backward-step" />
                         </template>
@@ -32,7 +42,7 @@
                       style="width: 50px;"
                       @click="control"
                     />
-                    <VaButton preset="plain" size="large">
+                    <VaButton @click="next" preset="plain" size="large">
                         <template #append>
                             <font-awesome-icon icon="fa-solid fa-forward-step" />
                         </template>
@@ -40,14 +50,14 @@
                 </div>
                 <VaDropdown placement="top" trigger="hover">
                     <template #anchor>
-                        <VaButton size="large" preset="secondary" :icon="volume>0?'volume_down':'volume_off'"/>
+                        <VaButton size="large" preset="secondary" :icon="volume>0?'volume_up':'volume_off'"/>
                     </template>
                     <VaDropdownContent>
                         <div class="slider">
                             <VaSlider
                               track-label-visible
                               v-model="volumeProgress"
-                              @change="changeVolume"
+                              @change="setVolume(volumeProgress/100);"
                               vertical
                             />  
                         </div>
@@ -69,21 +79,31 @@
 </template>
 <script lang="ts" setup>
 import MenuList from '@/components/MenuList.vue';
-import { onMounted, ref, watch } from 'vue';
+import { ref } from 'vue';
 import { useAudio } from '@/store/audio';
 import { storeToRefs } from 'pinia';
+import { usePlayList } from '@/store/play';
 
 const emit = defineEmits<{
     (e: 'open-list'): void,
 }>()
 
 const store = useAudio();
+const playStore = usePlayList();
 
-const { setVolume, playMusic, pauseMusic } = store;
+const { setVolume, stopMusic, playMusic, pauseMusic, createAudio } = store;
 
 const { paused, volume } = storeToRefs(store);
 
+const { nextSing, prevSing } = playStore;
+
+const { singName, singArtist, playCover } = storeToRefs(playStore)
+
 const volumeProgress = ref(volume.value*100);
+
+const playMode = ref('repeat');
+
+const playModeIcon = ref('repeat');
 
 const open = () => {
     emit('open-list');
@@ -98,18 +118,38 @@ const options = [
     { text: '从播放列表中删除', value: 'delete', icon: 'delete_outline' }
 ];
 
+const playModeOptions = [
+    { text: '随机播放', value: 'random', fa: 'fa-solid fa-shuffle' },
+    { text: '单曲循环', value: 'repeat_one', icon: 'repeat_one' },
+    { text: '循环播放', value: 'reapeat', icon: 'repeat' },
+]
+
 const control = () => {
     if(paused.value) {
         playMusic();
-        paused.value = false;
     }else {
         pauseMusic();
-        paused.value = true;
     }
 }
 
-const changeVolume = () => {
-    setVolume(volumeProgress.value/100);
+const selectPlayMode = (item) => {
+    playModeIcon.value = item.icon || item.fa;
+}
+
+const next = () => {
+    stopMusic();
+    nextSing();
+    const { playSrc } = playStore;
+    createAudio(playSrc);
+    playMusic();
+}
+
+const prev = () => {
+    stopMusic();
+    prevSing();
+    const { playSrc } = playStore;
+    createAudio(playSrc);
+    playMusic();
 }
 </script>
 <style scoped>
@@ -159,10 +199,10 @@ const changeVolume = () => {
 }
 .sing {
     display: flex;
-    width: 250px;
+    width: 300px;
 }
 .list {
-    width: 250px;
+    width: 300px;
     display: flex;
     justify-content: end;
 }
@@ -185,5 +225,8 @@ const changeVolume = () => {
 }
 :deep(.va-slider__handler__dot--value) {
     color: black !important;
+}
+.singer {
+    color: rgba(0, 0, 0, 0.55);
 }
 </style>
