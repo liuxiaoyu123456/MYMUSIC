@@ -1,8 +1,8 @@
 <template>
     <VaDataTable
+      v-model="selectItems"
       :selectable="props.select"
-      :select-mode="'multiple'"
-      @selection-change="selectedItemsEmitted = $event.currentSelectedItems"
+      select-mode="multiple"
       :items="props.items"
       :columns="props.columns"
       style="font-size: 14px;"
@@ -36,27 +36,21 @@
             </MenuList>
         </template>
     </VaDataTable>
-    <VaPagination
-        v-model="value"
-        :pages="10"
-        :visible-pages="3"
-        buttons-preset="secondary"
-        gapped
-        border-color="primary"
-        class="pagination"
-    />
 </template>
 <script setup lang="ts">
 import MenuList from '@/components/MenuList.vue';
 import { usePlayList } from '@/store/play';
 import { useAudio } from '@/store/audio';
 import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
 
 const { selectItem, deleteItem } = usePlayList();
 
 const { createAudio, playMusic, stopMusic } = useAudio();
 
-const value = ref(1);
+const store = usePlayList();
+
+const { selectItems }  = storeToRefs(store);
 
 const actionIndex = ref(0);
 
@@ -73,9 +67,7 @@ const addOptions = [
 
 const moreOptions = [
     { text: '删除', value: 'delete', icon: 'delete_outline' },
-]
-
-const selectedItemsEmitted = ref([]);
+];
 
 const selectPlay = (event: RowClickEvent) => {
     stopMusic();

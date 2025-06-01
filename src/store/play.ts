@@ -11,6 +11,7 @@ export const usePlayList = defineStore('play-list', {
         singArtist: '',
         playCover: '',
         order: 0,
+        selectItems: [],
     }),
 
     actions: {
@@ -58,7 +59,22 @@ export const usePlayList = defineStore('play-list', {
             }
 
             this.selectItem(this.order);
-        }
+        },
+
+        batchDelete() {
+            const lists = this.selectItems.map(item=>item.url);
+            console.log()
+            this.playList.forEach((item,index)=>{
+                if(lists.includes(item.url)) {
+                    this.playList.splice(index, 1);
+                    console.log('删除url '+item.url);
+                }
+            })
+        },
+
+        setSelectItems(arr: any[]) {
+            this.selectItems = arr;
+        },
     },
 
     persist: true,

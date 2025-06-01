@@ -2,10 +2,11 @@
     <div class="button-list">
         <!-- <audio :src="url" autoplay></audio> -->
         <div class="left">
-            <VaButton class="btn" round icon="play_arrow" preset="primary">播放</VaButton>
+            <VaButton class="btn" round icon="play_arrow" preset="primary" @click="play">播放</VaButton>
             <!-- <VaButton class="btn" round icon="download" preset="primary">下载</VaButton> -->
             <VaButton class="btn" round icon="add_circle_outline" preset="primary" @click="addFile">添加</VaButton>
             <VaButton class="btn" round icon="checklist" preset="primary" @click="batchAction = true;">批量</VaButton>
+            <VaButton v-if="batchAction" class="btn" round icon="delete_outline" preset="primary" @click="Delete">删除</VaButton>
         </div>
         <div class="right" v-if="!batchAction">
             <VaInput
@@ -21,13 +22,12 @@
                     />
                 </template>
             </VaInput>
-            <!-- <VaButton class="btn" icon="filter_alt">筛选</VaButton> -->
         </div>
         <div v-else>
             <VaButton
               icon="close"
               preset="primary"
-              @click="batchAction = false;"
+              @click="exit"
               round
             >退出批量</VaButton>
         </div>
@@ -37,17 +37,13 @@
 import { ref, watch } from 'vue';
 import { useAudio } from '@/store/audio';
 import { usePlayList } from '@/store/play';
-import { storeToRefs } from 'pinia';
 import { type IAudioMetadata } from 'music-metadata';
 import { getSize, formatFileSizeInMB, getImage } from '@/utils';
 
 const ipcRenderer = require('electron').ipcRenderer;
 
-const store = useAudio();
-
-const { sound } = storeToRefs(store);
-
-const { createAudio } = store;
+const { playMusic, stopMusic, createAudio } = useAudio();
+const { selectItem, batchDelete, setSelectItems } = usePlayList();
 
 const { addPlayItem } = usePlayList();
 
@@ -59,6 +55,15 @@ const batchAction = ref(false);
 
 const addFile = () => {
     ipcRenderer.send('open-file-dialog');
+};
+
+const Delete = ()=>{
+    batchDelete();
+};
+
+const exit = () => {
+    batchAction.value = false;
+    setSelectItems([]);
 }
 
 // 监听文件名
@@ -66,18 +71,29 @@ ipcRenderer.on('selected-file', (event: Event, selectedFilePath: string, file: I
     // 读取音频文件封面
     const image = file.common.picture;
     const picSrc = getImage(image!);
+    const { playList } = usePlayList();
+    const id = playList.length;
     const item = {
+        id,
+        picSrc,
         url: selectedFilePath,
         sing: file.common.title,
         column: file.common.album,
         artist: file.common.artist,
         length: getSize(file.format.duration!),
         size: formatFileSizeInMB(size),
-        picSrc: picSrc
     }
     // 添加到播放列表
     addPlayItem(item);
 });
+
+const play = () => {
+    stopMusic();
+    selectItem(0);
+    const { playSrc } = usePlayList();
+    createAudio(playSrc);
+    playMusic();
+}
 
 watch(
     () => batchAction.value, (newValue) => {
