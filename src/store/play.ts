@@ -3,7 +3,7 @@ import { useToast } from "vuestic-ui";
 
 const { init } = useToast();
 
-export const usePlayList = defineStore('play-list', {
+export const usePlayList = defineStore('play', {
     state: () => ({
         playList: [],
         playSrc: '',
@@ -16,8 +16,8 @@ export const usePlayList = defineStore('play-list', {
 
     actions: {
         addPlayItem(item) {
-            const lists = this.playList.map(item=>item.url);
-            if(lists.includes(item.url)){
+            const lists = this.playList.map(item=>item.id);
+            if(lists.includes(item.id)){
                 init({
                     message: "重复添加！",
                     color: "warning"
@@ -62,14 +62,13 @@ export const usePlayList = defineStore('play-list', {
         },
 
         batchDelete() {
-            const lists = this.selectItems.map(item=>item.url);
-            console.log()
-            this.playList.forEach((item,index)=>{
-                if(lists.includes(item.url)) {
-                    this.playList.splice(index, 1);
-                    console.log('删除url '+item.url);
+            const lists = this.selectItems.map(item=>item.id); // 需要删除的id列表
+            for(let i=0; i<this.playList.length;i++) {
+                if(lists.includes(this.playList[i].id)) {
+                    this.playList.splice(i, 1);
+                    i = i - 1;
                 }
-            })
+            }
         },
 
         setSelectItems(arr: any[]) {
@@ -77,5 +76,5 @@ export const usePlayList = defineStore('play-list', {
         },
     },
 
-    persist: true,
+    persist: true, // 持久化存储
 })

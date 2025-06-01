@@ -64,7 +64,11 @@
                     </VaDropdownContent>
                 </VaDropdown>
             </div>
-            <VaSlider track-label-visible :model-value="10" />
+            <VaSlider track-label-visible v-model="currentTime" :max="duration" @change="changeTime">
+                <template #trackLabel="{ value }">
+                    {{ getTime(value) }}
+                </template>
+            </VaSlider>
         </div>
         <div class="list">
             <VaButton preset="secondary" size="small">词</VaButton>
@@ -83,6 +87,7 @@ import { ref } from 'vue';
 import { useAudio } from '@/store/audio';
 import { storeToRefs } from 'pinia';
 import { usePlayList } from '@/store/play';
+import { getTime } from '@/utils';
 
 const emit = defineEmits<{
     (e: 'open-list'): void,
@@ -91,9 +96,9 @@ const emit = defineEmits<{
 const store = useAudio();
 const playStore = usePlayList();
 
-const { setVolume, stopMusic, playMusic, pauseMusic, createAudio } = store;
+const { setVolume, stopMusic, playMusic, pauseMusic, createAudio, seekMusic } = store;
 
-const { paused, volume } = storeToRefs(store);
+const { paused, volume, currentTime, duration } = storeToRefs(store);
 
 const { nextSing, prevSing } = playStore;
 
@@ -150,6 +155,10 @@ const prev = () => {
     const { playSrc } = playStore;
     createAudio(playSrc);
     playMusic();
+}
+
+const changeTime = (val: number) => {
+    seekMusic(val);
 }
 </script>
 <style scoped>
@@ -222,6 +231,9 @@ const prev = () => {
 }
 :deep(.va-slider--horizontal .va-slider__container) {
     height: auto;
+}
+:deep(.va-slider__handler__dot--focus) {
+    display: none;
 }
 :deep(.va-slider__handler__dot--value) {
     color: black !important;

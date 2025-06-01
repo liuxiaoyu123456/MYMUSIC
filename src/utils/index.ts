@@ -1,6 +1,6 @@
 import type { IPicture } from "music-metadata";
 
-export const getSize = (data: number) => {
+export const getTime = (data: number) => {
     const seconds = parseInt(data as unknown as string);
     const hours = Math.floor(seconds / 3600); // 计算小时数
     const minutes = Math.floor((seconds % 3600) / 60); // 计算分钟数

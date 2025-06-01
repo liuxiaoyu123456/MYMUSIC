@@ -38,7 +38,7 @@ import { ref, watch } from 'vue';
 import { useAudio } from '@/store/audio';
 import { usePlayList } from '@/store/play';
 import { type IAudioMetadata } from 'music-metadata';
-import { getSize, formatFileSizeInMB, getImage } from '@/utils';
+import { getTime, formatFileSizeInMB, getImage } from '@/utils';
 
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -71,8 +71,7 @@ ipcRenderer.on('selected-file', (event: Event, selectedFilePath: string, file: I
     // 读取音频文件封面
     const image = file.common.picture;
     const picSrc = getImage(image!);
-    const { playList } = usePlayList();
-    const id = playList.length;
+    const id = Math.floor(Math.random()*1000000)+1000000;
     const item = {
         id,
         picSrc,
@@ -80,7 +79,7 @@ ipcRenderer.on('selected-file', (event: Event, selectedFilePath: string, file: I
         sing: file.common.title,
         column: file.common.album,
         artist: file.common.artist,
-        length: getSize(file.format.duration!),
+        length: getTime(file.format.duration!),
         size: formatFileSizeInMB(size),
     }
     // 添加到播放列表
