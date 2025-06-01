@@ -20,10 +20,10 @@ export const useAudio = defineStore('audio', {
 
     actions: {
         createAudio(url: string) {
-            let update: number;
+            let update: number | null  = null;
             this.sound = new Howl({
                 src: [url],
-                autoplay: true,
+                autoplay: false,
                 volume: this.volume,
 
                 onload: () => {
@@ -31,22 +31,28 @@ export const useAudio = defineStore('audio', {
                 },
 
                 onplay: () => {
-                    update = setInterval(()=>{
-                        this.currentTime = this.currentTime +1;
-                    }, 1000);
+                    // console.log('开始播放');
+                    if(!update) {
+                        update = setInterval(()=>{
+                            this.currentTime = this.currentTime +1;
+                        }, 1000);
+                    }
                 },
 
                 onpause: () => {
-                    clearInterval(update);
+                    clearInterval(update!);
+                    update = null;
                 },
 
                 onstop: () => {
-                    clearInterval(update);
+                    clearInterval(update!);
+                    update = null;
                     this.currentTime = 0;
                 },
 
                 onend: () => {
-                    clearInterval(update);
+                    clearInterval(update!);
+                    update = null;
                     this.currentTime = 0;
                     this.paused = true;
                 }
@@ -54,31 +60,26 @@ export const useAudio = defineStore('audio', {
         },
 
         playMusic() {
-            this.sound!.play();
+            this.sound?.play();
             this.paused = false;
         },
 
         stopMusic() {
-            if(this.sound) {
-                this.sound.stop();
-            }
+            this.sound?.stop();
         },
 
         pauseMusic() {
-            this.sound!.pause();
+            this.sound?.pause();
             this.paused = true;
         },
 
         setVolume(vol: number) {
             this.volume = vol;
-            this.sound!.volume(vol);
+            this.sound?.volume(vol);
         },
 
         seekMusic(val: number) {
             this.sound?.seek(val);
-            if(this.paused) {
-                this.playMusic();
-            }
         }
     }
 

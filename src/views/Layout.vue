@@ -119,7 +119,7 @@ const onMin = () => {
 .main {
     flex: 1;
     display: flex;
-    height: calc(100% - 70px);
+    height: calc(100% - 80px);
 }
 .content {
     padding: 16px 24px;

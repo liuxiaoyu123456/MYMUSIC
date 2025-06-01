@@ -1,4 +1,5 @@
 import type { IPicture } from "music-metadata";
+import defaultMusic from "@/assets/music-default.jpg";
 
 export const getTime = (data: number) => {
     const seconds = parseInt(data as unknown as string);
@@ -27,7 +28,7 @@ export function formatFileSizeInMB(bytes: number): string {
 }
 
 export const getImage = (pic: IPicture[])=> {
-  let picSrc = ''
+  let picSrc = defaultMusic;
   if(pic && pic.length > 0) {
     let base64String = "";
     for (let i = 0; i < pic[0].data.length; i++) {

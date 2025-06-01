@@ -48,9 +48,9 @@ const props = defineProps<{modelValue: boolean}>();
 }
 .player-list {
     position: absolute;
-    bottom: 70px;
+    bottom: 80px;
     right: 5px;
-    height: calc(100% - 100px);
+    height: calc(100% - 150px);
     border-radius: 8px;
     overflow: hidden;
 }

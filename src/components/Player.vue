@@ -9,7 +9,7 @@
                 </div>
                 <div class="btn-list">
                     <VaButton preset="secondary" icon="favorite_border" size="small"/>
-                    <VaBadge overlap text="5" style="--va-badge-text-wrapper-border-radius: 50%;">
+                    <VaBadge overlap text="5" placement="bottom-end" style="--va-badge-text-wrapper-border-radius: 50%;">
                         <VaButton preset="secondary" icon="comment" size="small"/>
                     </VaBadge>
                     <MenuList placement="top" :items="options">
@@ -169,15 +169,16 @@ const changeTime = (val: number) => {
     width: 150px;
 }
 .sing-img {
-    width: 50px;
-    height: 50px;
+    width: 64px;
+    height: 64px;
     margin-right: 10px;
     border-radius: 5px;
 }
 .info {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
+    height: 45px;
 }
 .name {
     font-size: 14px;
@@ -190,7 +191,7 @@ const changeTime = (val: number) => {
 }
 .player {
     padding: 8px;
-    height: 70px;
+    height: 80px;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -204,11 +205,13 @@ const changeTime = (val: number) => {
     align-items: center;
     width: 400px;
     justify-content: space-between;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 .sing {
     display: flex;
     width: 300px;
+    align-items: center;
+    height: 64px;
 }
 .list {
     width: 300px;
@@ -221,6 +224,7 @@ const changeTime = (val: number) => {
 }
 .center {
     text-align: center;
+    margin-top: -4px;
 }
 :deep(.va-slider--horizontal .va-slider__track) {
     height: 4px;
