@@ -15,6 +15,8 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
+import { useModal } from 'vuestic-ui';
+
 import * as buffer from "buffer";
  
 if (typeof (window as any).global === "undefined"){  
@@ -29,8 +31,9 @@ library.add(fas, far, fab)
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 
-createApp(App)
-  .component('font-awesome-icon', FontAwesomeIcon)
+const app = createApp(App);
+
+app.component('font-awesome-icon', FontAwesomeIcon)
   .use(router)
   .use(pinia)
   .use(createVuestic({
@@ -41,4 +44,4 @@ createApp(App)
             }
         },
     }
-})).mount('#app')
+  })).mount('#app')

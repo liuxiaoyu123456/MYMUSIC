@@ -4,6 +4,7 @@ const { join } = require("path");
 const electron = require("electron");
 const ipcMain = electron.ipcMain;
 const dialog = electron.dialog;
+const shell = electron.shell;
 const mm = require("music-metadata");
 const fs = require("fs");
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
@@ -54,6 +55,9 @@ const createWindow = () => {
       const stat = fs.statSync(selectedFilePath);
       event.reply("selected-file", selectedFilePath, file, stat.size);
     }
+  });
+  ipcMain.on("watch-file", (event, file) => {
+    shell.showItemInFolder(file);
   });
 };
 app.whenReady().then(() => {

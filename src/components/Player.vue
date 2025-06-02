@@ -12,7 +12,7 @@
                     <VaBadge overlap text="5" placement="bottom-end" style="--va-badge-text-wrapper-border-radius: 50%;">
                         <VaButton preset="secondary" icon="comment" size="small"/>
                     </VaBadge>
-                    <MenuList placement="top" :items="options">
+                    <MenuList placement="top" :items="options" @change-select="changeMore">
                         <VaButton preset="secondary" icon="more_horiz" size="small"/>
                     </MenuList>
                 </div>
@@ -80,9 +80,14 @@
             />
         </div>
     </div>
+    <RateModal
+      v-model="modal"
+      @close="modal = false"
+    />
 </template>
 <script lang="ts" setup>
 import MenuList from '@/components/MenuList.vue';
+import RateModal from '@/components/RateModal.vue';
 import { ref } from 'vue';
 import { useAudio } from '@/store/audio';
 import { storeToRefs } from 'pinia';
@@ -102,13 +107,13 @@ const { paused, volume, currentTime, duration } = storeToRefs(store);
 
 const { nextSing, prevSing } = playStore;
 
-const { singName, singArtist, playCover } = storeToRefs(playStore)
+const { singName, singArtist, playCover, playMode } = storeToRefs(playStore)
 
 const volumeProgress = ref(volume.value*100);
 
-const playMode = ref('repeat');
-
 const playModeIcon = ref('repeat');
+
+const modal = ref(false);
 
 const open = () => {
     emit('open-list');
@@ -126,7 +131,7 @@ const options = [
 const playModeOptions = [
     { text: '随机播放', value: 'random', fa: 'fa-solid fa-shuffle' },
     { text: '单曲循环', value: 'repeat_one', icon: 'repeat_one' },
-    { text: '循环播放', value: 'reapeat', icon: 'repeat' },
+    { text: '循环播放', value: 'repeat', icon: 'repeat' },
 ]
 
 const control = () => {
@@ -139,6 +144,7 @@ const control = () => {
 
 const selectPlayMode = (item) => {
     playModeIcon.value = item.icon || item.fa;
+    playMode.value = item.value;
 }
 
 const next = () => {
@@ -160,6 +166,12 @@ const prev = () => {
 const changeTime = (val: number) => {
     seekMusic(val);
 }
+
+const changeMore = (item) => {
+    if(item.value === 'speed') {
+        modal.value = true;
+    }
+}
 </script>
 <style scoped>
 .action {
@@ -178,7 +190,7 @@ const changeTime = (val: number) => {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 45px;
+    height: 50px;
 }
 .name {
     font-size: 14px;

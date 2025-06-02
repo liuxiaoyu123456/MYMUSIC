@@ -38,3 +38,8 @@ export const getImage = (pic: IPicture[])=> {
   }
   return picSrc;
 }
+
+export const getTableByPage = (cur: number, arr: any[]) => {
+  const list = arr.slice((cur-1)*10, cur*10);
+  return list;
+}

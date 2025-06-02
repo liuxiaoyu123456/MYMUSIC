@@ -4,6 +4,7 @@ const { join } = require('path')
 const electron = require('electron')
 const ipcMain = electron.ipcMain
 const dialog = electron.dialog
+const shell = electron.shell
 const mm = require('music-metadata');
 const fs = require('fs');
 
@@ -66,6 +67,10 @@ const createWindow = () => {
             event.reply('selected-file', selectedFilePath, file, stat.size);
         }
     });
+
+    ipcMain.on('watch-file', (event, file) => {
+        shell.showItemInFolder(file)
+    })
 }
 
 app.whenReady().then(() => {

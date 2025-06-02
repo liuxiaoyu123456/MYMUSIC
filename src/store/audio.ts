@@ -1,5 +1,8 @@
 import { defineStore } from "pinia";
 import { Howl } from 'howler';
+import { usePlayList } from "@/store/play";
+
+const { nextSing, randomSing } = usePlayList();
 
 interface myAudio {
     sound: null | Howl,
@@ -7,6 +10,7 @@ interface myAudio {
     volume: number,
     currentTime: number,
     duration: number | undefined,
+    rate: number,
 }
 
 export const useAudio = defineStore('audio', {
@@ -16,6 +20,7 @@ export const useAudio = defineStore('audio', {
         volume: 1,
         currentTime: 0,
         duration: 100,
+        rate: 1,
     }),
 
     actions: {
@@ -25,6 +30,7 @@ export const useAudio = defineStore('audio', {
                 src: [url],
                 autoplay: false,
                 volume: this.volume,
+                rate: this.rate,
 
                 onload: () => {
                     this.duration = this.sound?.duration();
@@ -34,8 +40,8 @@ export const useAudio = defineStore('audio', {
                     // console.log('开始播放');
                     if(!update) {
                         update = setInterval(()=>{
-                            this.currentTime = this.currentTime +1;
-                        }, 1000);
+                            this.currentTime = this.currentTime + 1;
+                        }, 1000/this.rate);
                     }
                 },
 
@@ -55,6 +61,15 @@ export const useAudio = defineStore('audio', {
                     update = null;
                     this.currentTime = 0;
                     this.paused = true;
+                    const { playMode } = usePlayList();
+                    if(playMode === 'repeat') {
+                        nextSing();
+                    }else if(playMode === 'random') {
+                        randomSing();
+                    }
+                    const { playSrc } = usePlayList();
+                    this.createAudio(playSrc);
+                    this.playMusic();
                 }
             })
         },
@@ -80,6 +95,11 @@ export const useAudio = defineStore('audio', {
 
         seekMusic(val: number) {
             this.sound?.seek(val);
+        },
+
+        rateMusic(val: number) {
+            this.rate = val;
+            this.sound?.rate(val);
         }
     }
 

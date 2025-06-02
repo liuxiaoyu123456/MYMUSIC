@@ -1,40 +1,37 @@
 <template>
     <div class="button-list">
-        <!-- <audio :src="url" autoplay></audio> -->
         <div class="left">
             <VaButton class="btn" round icon="play_arrow" preset="primary" @click="play">播放</VaButton>
-            <!-- <VaButton class="btn" round icon="download" preset="primary">下载</VaButton> -->
             <VaButton class="btn" round icon="add_circle_outline" preset="primary" @click="addFile">添加</VaButton>
             <VaButton class="btn" round icon="checklist" preset="primary" @click="batchAction = true;">批量</VaButton>
             <VaButton v-if="batchAction" class="btn" round icon="delete_outline" preset="primary" @click="Delete">删除</VaButton>
         </div>
-        <div class="right" v-if="!batchAction">
-            <VaInput
-              clearable
-              v-model="keyWord"
-              placeholder="搜索音乐"
-              preset="solid"
-            >
-                <template #prependInner>
-                    <VaIcon
-                        name="search"
-                        color="secondary"
-                    />
-                </template>
-            </VaInput>
-        </div>
-        <div v-else>
-            <VaButton
-              icon="close"
-              preset="primary"
-              @click="exit"
-              round
-            >退出批量</VaButton>
-        </div>
+        <VaInput
+          v-if="!batchAction"
+          v-model="keyWord"
+          placeholder="搜索音乐"
+          preset="solid"
+          clearable
+        >
+            <template #prependInner>
+                <VaIcon
+                  name="search"
+                  color="secondary"
+                />
+            </template>
+        </VaInput>
+        <VaButton
+          v-else
+          icon="close"
+          preset="primary"
+          @click="exit"
+          round
+        >退出批量</VaButton>
     </div>
 </template>
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import SearchInput from '@/components/SearchInput.vue';
 import { useAudio } from '@/store/audio';
 import { usePlayList } from '@/store/play';
 import { type IAudioMetadata } from 'music-metadata';
@@ -78,9 +75,10 @@ ipcRenderer.on('selected-file', (event: Event, selectedFilePath: string, file: I
         url: selectedFilePath,
         sing: file.common.title,
         column: file.common.album,
-        artist: file.common.artist,
+        artist: file.common.artists?.join(","),
         length: getTime(file.format.duration!),
         size: formatFileSizeInMB(size),
+        isPlaying: false,
     }
     // 添加到播放列表
     addPlayItem(item);

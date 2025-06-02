@@ -122,8 +122,9 @@ const onMin = () => {
     height: calc(100% - 80px);
 }
 .content {
-    padding: 16px 24px;
+    padding: 16px 24px 0;
     height: calc(100% - 68px);
+    overflow: auto;
 }
 button {
     -webkit-app-region: no-drag;

@@ -11,13 +11,14 @@ export const usePlayList = defineStore('play', {
         singArtist: '',
         playCover: '',
         order: 0,
+        playMode: 'repeat',
         selectItems: [],
     }),
 
     actions: {
         addPlayItem(item) {
-            const lists = this.playList.map(item=>item.id);
-            if(lists.includes(item.id)){
+            const lists = this.playList.map(item=>item.url);
+            if(lists.includes(item.url)){
                 init({
                     message: "重复添加！",
                     color: "warning"
@@ -28,6 +29,14 @@ export const usePlayList = defineStore('play', {
         },
 
         selectItem(num: number) {
+            // 设置播放状态
+            this.playList.forEach((item, index)=>{
+                if(index === num) {
+                    item.isPlaying = true;
+                }else {
+                    item.isPlaying = false;
+                }
+            })
             this.order = num;
             if(this.playList.length > 0){
                 this.playSrc = this.playList[num].url;
@@ -58,6 +67,12 @@ export const usePlayList = defineStore('play', {
                 this.order = this.order - 1;
             }
 
+            this.selectItem(this.order);
+        },
+
+        randomSing() {
+            const randomIndex = Math.floor(Math.random() * this.playList.length);
+            this.order = randomIndex;
             this.selectItem(this.order);
         },
 

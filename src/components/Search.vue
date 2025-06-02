@@ -5,34 +5,22 @@
           preset="plain"
           size="large"
           icon="keyboard_arrow_left"
+          @click="router.back()"
         />
         <VaButton
           round
           preset="plain"
           size="large"
           icon="keyboard_arrow_right"
+          @click="router.forward()"
         />
-        <VaInput
-          v-model="keyWord"
-          placeholder="搜索音乐"
-          preset="solid"
-          clearable
-        >
-            <template #prependInner>
-                <VaIcon
-                    name="search"
-                    color="secondary"
-                />
-            </template>
-        </VaInput>
+        <SearchInput placement="bottom-left"/>
     </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useModal } from 'vuestic-ui';
+import SearchInput from '@/components/SearchInput.vue';
+import router from '@/router';
 
-const { confirm } = useModal();
-const keyWord = ref('');
 </script>
 <style scoped>
 .search {
@@ -42,9 +30,6 @@ const keyWord = ref('');
     align-items: center;
 }
 button {
-  -webkit-app-region: no-drag;
-}
-.va-input {
   -webkit-app-region: no-drag;
 }
 </style>
