@@ -52,13 +52,13 @@ const page = ref('home');
 
 const online = [
     {
-        icon: 'home', title: '推荐', route: '/'
+        icon: 'home', title: '推荐', route: '/recommend'
     },
     {
         icon: 'music_video', title: '乐馆', route: '/musicShop'
     },
     {
-        icon: 'videocam', title: '视频', route: '/'
+        icon: 'videocam', title: '视频', route: '/videoDetail'
     },
     {
         icon: 'radar', title: '雷达', route: '/'

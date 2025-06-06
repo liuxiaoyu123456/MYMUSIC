@@ -2,21 +2,20 @@
     <div class="login">
         <div class="box">
             <VaCard>
-                <!-- <VaCardTitle>Title</VaCardTitle> -->
                 <VaCardContent class="content">
                     <div class="h1">欢迎！</div>
                     <div class="h2">登录</div>
                     <div>海贝音乐</div>
                     <VaForm ref="Login" class="form">
                         <div class="item">
-                           <span class="label">用户名</span>
+                           <span class="label">QQ号</span>
                            <VaInput
                              v-model="loginForm.username"
-                             placeholder="请输入用户名"
-                             :rules="[(value) => (value && value.length > 0) || '用户名必须填写！']"
+                             placeholder="请输入QQ"
+                             :rules="[(value) => (value && value.length > 0) || 'QQ必须填写！']"
                             /> 
                         </div>
-                        <div class="item">
+                        <!-- <div class="item">
                             <span class="label">密码</span>
                             <VaInput
                               v-model="loginForm.password"
@@ -24,23 +23,23 @@
                               type="password"
                               :rules="[(value) => (value && value.length > 0) || '密码必须填写！']"
                             /> 
-                        </div>
+                        </div> -->
                         <div class="remember">
                             <VaCheckbox
                                 v-model="loginForm.remember"
                                 label="记住我"
                             />
-                            <VaButton preset="plain">忘记密码？</VaButton>
+                            <!-- <VaButton preset="plain">忘记密码？</VaButton> -->
                         </div>
                     </VaForm>
                     <VaButton
                       class="submit"
                       @click="login"
                     >登录</VaButton>
-                    <div class="tip">
+                    <!-- <div class="tip">
                         还没有注册？
                         <VaButton preset="plain">去注册</VaButton>
-                    </div>
+                    </div> -->
                 </VaCardContent>
             </VaCard>
         </div>
@@ -49,19 +48,23 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useForm } from 'vuestic-ui';
+import { getCookie, setCookie } from '@/api/user';
+import router from '@/router';
 
 const loginForm = ref({
     username: '',
-    password: '',
     remember: false,
 })
 
 const { validate } = useForm('Login');
 
 const login = () => {
-    // $vaToast.init({ message: '用户名或者密码有误', color: 'danger' })
-    validate();
-}
+    if(validate()) {
+        setCookie();
+        console.log(getCookie(loginForm.value.username));
+        router.push('/local');
+    }
+};
 </script>
 <style scoped>
 .login {

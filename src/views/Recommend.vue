@@ -1,4 +1,6 @@
 <template>
-    推荐
+    
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { dailyRecommend } from '@/api/recommend';
+</script>

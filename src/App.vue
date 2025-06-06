@@ -7,6 +7,10 @@
 </script>
 
 <style scoped>
+#app {
+  height: 100vh;
+  width: 100vw;
+}
 .logo {
   height: 6em;
   padding: 1.5em;

@@ -2,12 +2,12 @@
     <div class="like">
         <div v-if="!batchMode" class="title">喜欢</div>
         <Tabs v-if="!batchMode" :items="likeItems" class="tab"/>
-        <div class="empty">
+        <!-- <div class="empty">
           <div class="box">
             <VaIcon name="audio_file" class="primary" size="120px"/>
             <div>暂时没有歌曲</div>
           </div>
-        </div>
+        </div> -->
     </div>
 </template>
 <script setup lang="ts">
@@ -67,11 +67,9 @@ const items = [
 ];
 </script>
 <style scoped>
-.like {
-    overflow: auto;
-    overflow-x: hidden;
+/* .like {
     height: calc(100vh - 154px);
-}
+} */
 .title {
     font-size: 25px;
     font-weight: bolder;

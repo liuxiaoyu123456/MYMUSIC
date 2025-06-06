@@ -1,5 +1,6 @@
 import type { IPicture } from "music-metadata";
 import defaultMusic from "@/assets/music-default.jpg";
+import { getUserDetail } from "@/api/user";
 
 export const getTime = (data: number) => {
     const seconds = parseInt(data as unknown as string);
@@ -37,9 +38,16 @@ export const getImage = (pic: IPicture[])=> {
     picSrc = "data:image/jpeg;base64," + window.btoa(base64String);
   }
   return picSrc;
-}
+};
 
-export const getTableByPage = (cur: number, arr: any[]) => {
-  const list = arr.slice((cur-1)*10, cur*10);
-  return list;
+export const isLogin = async() => {
+  const { data } = await getUserDetail();
+
+  return data.result;
+};
+
+export const getListen = (num: number) => {
+  // 将数字除以10000，并保留一位小数
+    const result = `${(num / 10000).toFixed(1)}万`;
+    return result;
 }

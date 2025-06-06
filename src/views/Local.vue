@@ -15,6 +15,7 @@ import ButtonList from '@/components/ButtonList.vue';
 import { usePlayList } from '@/store/play';
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
+import { getUserDetail } from '@/api/user';
 
 const store = usePlayList();
 
@@ -37,6 +38,7 @@ const batchMode = ref(false);
 const changeBatch = (val: boolean) => {
     batchMode.value = val;
 };
+// console.log(getUserDetail());
 </script>
 <style scoped>
 .title {

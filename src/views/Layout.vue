@@ -6,6 +6,7 @@
                 <div class="header">
                     <Search/>
                     <div class="action">
+                        <VaButton preset="secondary">点击登录</VaButton>
                         <MenuList placement="bottom" :items="options" @change-select="select">
                             <VaButton size="large" preset="plain" icon="settings"/>
                         </MenuList>
@@ -37,10 +38,9 @@ import Search from '@/components/Search.vue';
 import Player from '@/components/Player.vue';
 import PlayerList from '@/components/PlayerList.vue';
 import MenuList from '@/components/MenuList.vue';
-
 import { useModal } from 'vuestic-ui';
-
 import { ref } from 'vue';
+import router from '@/router';
 
 const playerShow = ref(false);
 
@@ -96,7 +96,7 @@ const onMin = () => {
 .action {
     display: flex;
     align-items: center;
-    width: 120px;
+    width: 200px;
     justify-content: space-between;
 }
 .home {
@@ -109,6 +109,7 @@ const onMin = () => {
 .conten-box {
     flex: 1;
     height: 100%;
+    max-width: calc(100vw - 256px);
 }
 .header {
     display: flex;

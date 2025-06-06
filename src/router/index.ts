@@ -1,5 +1,7 @@
 /* 路由配置文件 index.ts */
-import { createWebHistory, createRouter } from 'vue-router'
+import { createWebHistory, createRouter } from 'vue-router';
+import { isLogin } from '@/utils';
+import { useUserInfo } from '@/store/user';
  
 // 定义路由配置
 const routes = [
@@ -16,11 +18,17 @@ const routes = [
             {
                 path: '/recommend',
                 name: 'Recommend',
+                meta: {
+                    requireAuth: true,
+                },
                 component: () => import('@/views/Recommend.vue')
             },
             {
                 path: '/like',
                 name: 'Like',
+                meta: {
+                    requireAuth: true,
+                },
                 component: () => import('@/views/Like.vue')
             },
             {
@@ -51,8 +59,22 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),    // 导航历史记录模式
     routes
+});
+
+router.beforeEach(async(to, from, next) => {
+    if(!to.meta.requireAuth) {
+        next();
+    } else {
+        const res = await isLogin();
+        if(res === 301) {
+            next('login');
+        }else {
+            const { setUserInfo } = useUserInfo();
+            setUserInfo();
+            next();
+        }
+    }
 })
- 
  
 // 导出实例
 export default router;

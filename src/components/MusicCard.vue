@@ -1,32 +1,41 @@
 <template>
-    <VaCard class="music-card">
-        <div class="hover">
-            <VaButton
-              color="info"
-              gradient
-              icon="play_arrow"
-              round
-              class="music-btn"
+    <div>
+        <VaCard class="music-card">
+            <div class="hover">
+                <VaButton
+                    color="info"
+                    gradient
+                    icon="play_arrow"
+                    round
+                    class="music-btn"
+                />
+            </div>
+            <img
+                class="poster"
+                :src="props.picSrc"
             />
+        </VaCard>
+        <div class="album-title">
+            {{ props.title }}
         </div>
-        <img
-          class="poster"
-          src="https://picsum.photos/200"
-        />
-    </VaCard>
+    </div>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps<{
+    picSrc: string,
+    title: string
+}>();
+</script>
 <style scoped>
 .music-card {
-    width: 180px;
-    height: 180px;
     position: relative;
     overflow: hidden;
+    aspect-ratio: 1 / 1;
 }
 .hover {
     opacity: 0;
-    height: 180px;
-    width: 180px;
+    height: 100%;
+    width: 100%;
     position: absolute;
     left: 0;
     top: 0;
@@ -42,7 +51,11 @@
 }
 .music-btn {
     position: absolute;
-    left: 15px;
-    bottom: 15px;
+    left: 10%;
+    bottom: 10%;
+}
+.album-title {
+    margin-top: 10px;
+    color: rgba(0, 0, 0, 0.75);
 }
 </style>

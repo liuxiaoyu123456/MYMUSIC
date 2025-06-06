@@ -76,8 +76,8 @@ export const usePlayList = defineStore('play', {
             this.selectItem(this.order);
         },
 
-        batchDelete() {
-            const lists = this.selectItems.map(item=>item.id); // 需要删除的id列表
+        batchDelete(deleteItems?: any[]) {
+            const lists = deleteItems? deleteItems:this.selectItems.map(item=>item.id); // 需要删除的id列表
             for(let i=0; i<this.playList.length;i++) {
                 if(lists.includes(this.playList[i].id)) {
                     this.playList.splice(i, 1);
