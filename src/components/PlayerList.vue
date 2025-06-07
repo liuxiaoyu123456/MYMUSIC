@@ -123,7 +123,7 @@ const moreAction = (item) => {
         stopMusic();
         selectItem(actionIndex.value);
         const { playSrc } = usePlayList();
-        createAudio(playSrc);
+        createAudio([playSrc]);
         playMusic();
     }
 };
@@ -133,7 +133,7 @@ const selectPlay = (item, index: number) => {
         stopMusic();
         selectItem(index);
         const { playSrc } = usePlayList();
-        createAudio(playSrc);
+        createAudio([playSrc]);
         playMusic();
     }
 };

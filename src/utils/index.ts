@@ -49,4 +49,25 @@ export const getListen = (num: number) => {
   // 将数字除以10000，并保留一位小数
     const result = `${(num / 10000).toFixed(1)}万`;
     return result;
-}
+};
+
+export const getArtist = (arr: any) => {
+  const list = arr.map(item=>(item.name));
+  return list.join(',');
+};
+
+export const getNetworkImage = (mid: string) => {
+  let res = defaultMusic;
+  if(mid) {
+    res = `https://y.gtimg.cn/music/photo_new/T002R300x300M000${mid}_1.jpg`;
+  }
+  return res;
+};
+
+export const transformUrls = (obj: object) => {
+  const arr = [];
+  for(const item in obj) {
+    arr.push(obj[item]);
+  }
+  return arr;
+};

@@ -24,10 +24,10 @@ export const useAudio = defineStore('audio', {
     }),
 
     actions: {
-        createAudio(url: string) {
+        createAudio(url: string[]) {
             let update: number | null  = null;
             this.sound = new Howl({
-                src: [url],
+                src: url,
                 autoplay: false,
                 volume: this.volume,
                 rate: this.rate,
@@ -68,7 +68,7 @@ export const useAudio = defineStore('audio', {
                         randomSing();
                     }
                     const { playSrc } = usePlayList();
-                    this.createAudio(playSrc);
+                    this.createAudio([playSrc]);
                     this.playMusic();
                 }
             })

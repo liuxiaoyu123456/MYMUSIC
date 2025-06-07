@@ -1,6 +1,6 @@
 # MYMUSIC
 
-> 一款基于Vue3 + ts + vite + Electron的桌面音乐播放器应用
+> 一款基于Vue3 + ts + vite + Electron的桌面音乐播放器应用，仿qq音乐
 
 ## 开发语言
 

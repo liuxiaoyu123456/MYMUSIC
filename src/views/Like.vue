@@ -20,20 +20,19 @@ import Tabs from '@/components/Tabs.vue';
 import MusicTable from '@/components/MusicTable.vue';
 import { getSonglist } from '@/api/songlist';
 import { useUserInfo } from '@/store/user';
-import { useLike } from '@/store/like';
+import { usePlayList } from '@/store/play';
 import { onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 
 const { mymusic } = useUserInfo();
 
-const store = useLike();
+const store = usePlayList();
 
 const { setLike } = store;
 
 const { likeLists } = storeToRefs(store);
 
 const likeItems = ['歌曲', '歌单', '专辑', '有声节目', '视频'];
-const keyWord = ref('');
 const batchMode = ref(false);
 
 const changeBatch = (val: boolean) => {
@@ -56,13 +55,11 @@ const getLikeList = async(id: string) => {
 }
 
 onMounted(async()=>{
+  likeLists.value = [];
   getLikeList(mymusic[0].id);
 })
 </script>
 <style scoped>
-/* .like {
-    height: calc(100vh - 154px);
-} */
 .title {
     font-size: 25px;
     font-weight: bolder;

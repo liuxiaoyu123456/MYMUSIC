@@ -151,7 +151,7 @@ const next = () => {
     stopMusic();
     nextSing();
     const { playSrc } = playStore;
-    createAudio(playSrc);
+    createAudio([playSrc]);
     playMusic();
 }
 
@@ -159,7 +159,7 @@ const prev = () => {
     stopMusic();
     prevSing();
     const { playSrc } = playStore;
-    createAudio(playSrc);
+    createAudio([playSrc]);
     playMusic();
 }
 

@@ -3,7 +3,7 @@
     <Tabs v-if="!batchMode" :items="tabs"/>
     <ButtonList @batch-change="changeBatch"/>
     <MusicTable
-      :items="playList"
+      :items="localSongs"
       :columns="columns"
       :select="batchMode"
     />
@@ -15,15 +15,12 @@ import ButtonList from '@/components/ButtonList.vue';
 import { usePlayList } from '@/store/play';
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
-import { getUserDetail } from '@/api/user';
 
 const store = usePlayList();
 
-const { playList } = storeToRefs(store);
+const { localSongs } = storeToRefs(store);
 
 const tabs = ['本地歌曲','下载歌曲','正在下载'];
-
-const currentPage = ref(1);
 
 const columns = [
     { key: 'sing', label: '歌手/歌名', sortable: true },
@@ -38,7 +35,6 @@ const batchMode = ref(false);
 const changeBatch = (val: boolean) => {
     batchMode.value = val;
 };
-// console.log(getUserDetail());
 </script>
 <style scoped>
 .title {

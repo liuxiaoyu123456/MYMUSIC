@@ -88,7 +88,7 @@ const play = () => {
     stopMusic();
     selectItem(0);
     const { playSrc } = usePlayList();
-    createAudio(playSrc);
+    createAudio([playSrc]);
     playMusic();
 }
 

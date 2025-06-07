@@ -23,6 +23,11 @@
                 </div>
             </div>       
         </template>
+        <template #cell(column)="value">
+            <div class="column">
+                {{ value.rowData.column }}
+            </div>
+        </template>
         <template #cell(download)="value">
             <VaProgressCircle
               v-if="value.rowData.process < 100"
@@ -50,10 +55,15 @@ import { useModal, type DataTableRow, } from 'vuestic-ui';
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import MusicPic from "@/components/MusicPic.vue";
+import { useRoute } from 'vue-router';
+import { getPlayUrl } from '@/api/song';
+import { transformUrls } from '@/utils';
+
+const route = useRoute();
 
 const ipcRenderer = require('electron').ipcRenderer;
 
-const { selectItem, deleteItem } = usePlayList();
+const { selectItem, deleteItem, addLocaltoPlay, addLiketoPlay, nextSing } = usePlayList();
 
 const { createAudio, playMusic, stopMusic } = useAudio();
 
@@ -61,9 +71,11 @@ const { init } = useModal();
 
 const store = usePlayList();
 
-const { selectItems }  = storeToRefs(store);
+const { selectItems, playList }  = storeToRefs(store);
 
 const actionIndex = ref(0);
+
+const first = ref(true);
 
 const props = defineProps<{ 
     items: any[],
@@ -83,13 +95,35 @@ const moreOptions = [
     { text: '查看评论', value: 'comment', icon: 'comment' },
 ];
 
-const selectPlay = (event: RowClickEvent) => {
+const selectPlay = async(event: RowClickEvent) => {
+    if(first.value) {
+        if(route.path === '/local') {
+            addLocaltoPlay();
+        }else {
+            addLiketoPlay();
+        }
+        first.value = false;
+    }
     if(!event.item.isPlaying) {
-        stopMusic();
-        selectItem(event.itemIndex);
-        const { playSrc } = usePlayList();
-        createAudio(playSrc);
-        playMusic();
+        if(route.path === '/local') {
+            stopMusic();
+            selectItem(event.itemIndex);
+            const { playSrc } = usePlayList();
+            createAudio([playSrc]);
+            playMusic();
+        }else {
+            stopMusic();
+            let urls: string[] = [];
+            let i = event.itemIndex;
+            while(urls.length === 0) {
+                selectItem(i);
+                const { data } = await getPlayUrl(playList.value[i].id);
+                urls = transformUrls(data.data);
+                i++;
+            }
+            createAudio(urls);
+            playMusic();
+        }
     }
 };
 
@@ -121,7 +155,7 @@ const moreAction = (item) => {
         stopMusic();
         selectItem(actionIndex.value);
         const { playSrc } = usePlayList();
-        createAudio(playSrc);
+        createAudio([playSrc]);
         playMusic();
     }
 }
@@ -155,5 +189,10 @@ const getRowStatus = (row: DataTableRow) => {
 :deep(.playClass) {
     color: var(--va-primary);
     background-color: rgba(44, 130, 224, 0.1);
+}
+.column {
+    text-overflow: ellipsis;
+    width: 400px;
+    overflow: hidden;
 }
 </style>

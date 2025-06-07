@@ -9,3 +9,13 @@ export const getSong = (mid: string) => {
     })
     return res;
 };
+
+export const getPlayUrl = (songmid: string) => {
+    const res = axios({
+        url: '/song/urls',
+        params: {
+            id: songmid,
+        }
+    })
+    return res;
+}

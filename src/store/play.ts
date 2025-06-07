@@ -1,11 +1,14 @@
 import { defineStore } from "pinia";
 import { useToast } from "vuestic-ui";
+import { getTime, getNetworkImage, getArtist } from "@/utils";
 
 const { init } = useToast();
 
 export const usePlayList = defineStore('play', {
     state: () => ({
         playList: [],
+        likeLists: [],
+        localSongs: [],
         playSrc: '',
         singName: '',
         singArtist: '',
@@ -17,13 +20,14 @@ export const usePlayList = defineStore('play', {
 
     actions: {
         addPlayItem(item) {
-            const lists = this.playList.map(item=>item.url);
+            const lists = this.localSongs.map(item=>item.url);
             if(lists.includes(item.url)){
                 init({
                     message: "重复添加！",
                     color: "warning"
                 })
             }else {
+                this.localSongs.push(item);
                 this.playList.push(item);
             }
         },
@@ -39,7 +43,7 @@ export const usePlayList = defineStore('play', {
             })
             this.order = num;
             if(this.playList.length > 0){
-                this.playSrc = this.playList[num].url;
+                this.playSrc = this.playList[num].url || '';
                 this.singName = this.playList[num].sing;
                 this.singArtist = this.playList[num].artist;
                 this.playCover = this.playList[num].picSrc;
@@ -48,6 +52,7 @@ export const usePlayList = defineStore('play', {
 
         deleteItem(num: number) {
             this.playList.splice(num, 1);
+            this.localSongs.splice(num, 1);
         },
 
         nextSing() {
@@ -81,6 +86,7 @@ export const usePlayList = defineStore('play', {
             for(let i=0; i<this.playList.length;i++) {
                 if(lists.includes(this.playList[i].id)) {
                     this.playList.splice(i, 1);
+                    this.localSongs.splice(i, 1);
                     i = i - 1;
                 }
             }
@@ -88,6 +94,29 @@ export const usePlayList = defineStore('play', {
 
         setSelectItems(arr: any[]) {
             this.selectItems = arr;
+        },
+
+        addLocaltoPlay() {
+            this.playList = [...this.localSongs];
+        },
+
+        addLiketoPlay() {
+            this.playList = [...this.likeLists];
+        },
+
+        setLike(arr: any[]) {
+            arr.forEach((item) => {
+                const like = {
+                    id: item.songmid,
+                    sing: item.songname,
+                    column: item.albumname,
+                    length: getTime(item.interval),
+                    picSrc: getNetworkImage(item.albummid),
+                    artist: getArtist(item.singer),
+                    isPlaying: false,
+                }
+                this.likeLists.push(like);
+            })
         },
     },
 
