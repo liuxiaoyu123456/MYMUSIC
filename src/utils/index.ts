@@ -42,8 +42,7 @@ export const getImage = (pic: IPicture[])=> {
 
 export const isLogin = async() => {
   const { data } = await getUserDetail();
-
-  return data.result;
+  return data;
 };
 
 export const getListen = (num: number) => {

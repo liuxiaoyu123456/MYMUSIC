@@ -8,13 +8,29 @@
             <div>暂时没有歌曲</div>
           </div>
         </div> -->
+        <MusicTable
+          :items="likeLists"
+          :columns="columns"
+          :select="batchMode"
+        />
     </div>
 </template>
 <script setup lang="ts">
 import Tabs from '@/components/Tabs.vue';
-import ButtonList from '@/components/ButtonList.vue';
 import MusicTable from '@/components/MusicTable.vue';
-import { ref } from 'vue';
+import { getSonglist } from '@/api/songlist';
+import { useUserInfo } from '@/store/user';
+import { useLike } from '@/store/like';
+import { onMounted, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+
+const { mymusic } = useUserInfo();
+
+const store = useLike();
+
+const { setLike } = store;
+
+const { likeLists } = storeToRefs(store);
 
 const likeItems = ['歌曲', '歌单', '专辑', '有声节目', '视频'];
 const keyWord = ref('');
@@ -22,49 +38,26 @@ const batchMode = ref(false);
 
 const changeBatch = (val: boolean) => {
     batchMode.value = val;
+};
+
+const columns = [
+  { key: 'sing', label: '歌手/歌名', sortable: true },
+  { key: 'column', label: '专辑' },
+  { key: 'length', label: '时长' },
+  { key: 'action', label: '操作' }
+]
+
+const likeList = ref([]);
+
+const getLikeList = async(id: string) => {
+  const { data } = await getSonglist(id);
+  likeList.value = data.data.songlist;
+  setLike(likeList.value);
 }
-const items = [
-      {
-        id: 1,
-        name: "Leanne Graham",
-        username: "Bret",
-        email: "Sincere@april.biz",
-        phone: "1-770-736-8031 x56442",
-        website: "hildegard.org",
-      },
-      {
-        id: 2,
-        name: "Ervin Howell",
-        username: "Antonette",
-        email: "Shanna@melissa.tv",
-        phone: "010-692-6593 x09125",
-        website: "anastasia.net",
-      },
-      {
-        id: 3,
-        name: "Clementine Bauch",
-        username: "Samantha",
-        email: "Nathan@yesenia.net",
-        phone: "1-463-123-4447",
-        website: "ramiro.info",
-      },
-      {
-        id: 4,
-        name: "Patricia Lebsack",
-        username: "Karianne",
-        email: "Julianne.OConner@kory.org",
-        phone: "493-170-9623 x156",
-        website: "kale.biz",
-      },
-      {
-        id: 5,
-        name: "Chelsey Dietrich",
-        username: "Kamren",
-        email: "Lucio_Hettinger@annie.ca",
-        phone: "(254)954-1289",
-        website: "demarco.info",
-      },
-];
+
+onMounted(async()=>{
+  getLikeList(mymusic[0].id);
+})
 </script>
 <style scoped>
 /* .like {

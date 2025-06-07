@@ -1,7 +1,7 @@
 /* 路由配置文件 index.ts */
 import { createWebHistory, createRouter } from 'vue-router';
-import { isLogin } from '@/utils';
 import { useUserInfo } from '@/store/user';
+import { getUserDetail, userRefresh } from '@/api/user';
  
 // 定义路由配置
 const routes = [
@@ -65,12 +65,16 @@ router.beforeEach(async(to, from, next) => {
     if(!to.meta.requireAuth) {
         next();
     } else {
-        const res = await isLogin();
-        if(res === 301) {
+        // 判断是否登录
+        const { data } = await userRefresh();
+        if(data.result === 301) {
             next('login');
         }else {
-            const { setUserInfo } = useUserInfo();
-            setUserInfo();
+            const { userInfo, setUserInfo } = useUserInfo();
+            if(JSON.stringify(userInfo)=='{}'){
+                const { data } = await getUserDetail();
+                setUserInfo(data.data);
+            }
             next();
         }
     }

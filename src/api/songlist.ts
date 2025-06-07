@@ -1,8 +1,12 @@
 import axios from "@/utils/request";
 
-export const getCategory = () => {
+export const getSonglist = (id: string) => {
     const res = axios({
-        url: '/radio/category',
+        url: '/songlist',
+        params: {
+            id,
+        }
     })
     return res;
-};
+}
+
