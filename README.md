@@ -19,6 +19,8 @@
 > 后端正在开发中，目前只开发了前端本地音乐部分
 <details>
 <summary>本地音乐主页面</summary>
-![image](/src/assets/截图20250603025027.png)
+
+![主页面](/src/assets/截图20250603025027.png)
+
 </details>
 
