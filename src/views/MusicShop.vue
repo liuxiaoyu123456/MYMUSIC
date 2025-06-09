@@ -28,7 +28,7 @@
             />
         </div>
     </div>
-    <div v-if="tab === 2" class="top">
+    <div v-if="tab === 1" class="top">
         <!-- 巅峰榜 -->
         <div class="peak">
             <TopMusicCard
@@ -67,6 +67,52 @@
             />
         </div>
     </div>
+    <div v-if="tab === 2">
+        <div class="btn-group">
+            <VaButton
+              v-for="item in countryBtn"
+              round
+              preset="primary"
+              style="width: 80px;"
+              @click="singerParams.area = item.id"
+            >
+                {{ item.name }}
+            </VaButton>
+        </div>
+        <div class="album">
+            <div class="btn-group" >
+                <VaButton
+                    v-for="item in sexBtn"
+                    round
+                    preset="primary"
+                    style="width: 80px;"
+                    @click="singerParams.sex = item.id"
+                >
+                    {{ item.name }}
+                </VaButton>
+            </div>
+            <VaMenu :options="genreBtn">
+                <template #anchor>
+                    <VaButton preset="plain">全部</VaButton>
+                </template>
+            </VaMenu>
+        </div>
+        <div class="btn-group">
+            <VaButton
+              v-for="item in indexBtn"
+              preset="plain"
+              @click="singerParams.index = item.id"
+            >
+                {{ item.name }}
+            </VaButton>
+        </div>
+        <div class="singer-list">
+            <div class="singer-item" v-for="item in singerList">
+                <img class="singer-img" :src="item.singer_pic">
+                <span style="cursor: pointer;">{{ item.singer_name }}</span>
+            </div>
+        </div>
+    </div>
 </template>
 <script setup lang="ts">
 import Tabs from '@/components/Tabs.vue';
@@ -78,12 +124,19 @@ import { getRecommendPlaylist, getNewSongs } from '@/api/recommend';
 import { getTop } from '@/api/top';
 
 import { onMounted, ref, watch } from 'vue';
+import { getSingerCategory, getSingerList } from '@/api/singer';
 
-const tabs = ['精选', '听书', '排行', '歌手'];
+const tabs = ['精选', '排行', '歌手'];
+
+const countryBtn = ref([]);
+
+const sexBtn = ref([]);
+
+const genreBtn = ref([]);
+
+const indexBtn = ref([]);
 
 const tab = ref(0);
-
-const bannerItems = ref([]);
 
 const recommendAblumItems = ref([]);
 
@@ -94,6 +147,17 @@ const areaSongsItems = ref([]);
 const specialSongsItems = ref([]);
 
 const globalSongsItems = ref([]);
+
+const topLists = ref([]);
+
+const singerList = ref([]);
+
+const singerParams = ref({
+    area: -100,
+    genre: -100,
+    index: -100,
+    sex: -100,
+})
 
 const getRecommendAblums = async() => {
     const { data } = await getRecommendPlaylist();
@@ -117,13 +181,32 @@ const getTopList = async() => {
     globalSongsItems.value = data.data[3].list;
 };
 
-const topLists = ref([]);
+const getSinger = async() => {
+    const { data } = await getSingerList(singerParams.value);
+    singerList.value = data.list;
+}
+
+watch(
+    ()=>singerParams.value, () => {
+        getSinger();
+    },
+    { deep: true }
+)
 
 onMounted(async()=>{
     getRecommendAblums();
     getNewSongsItems();
     getTopList();
-})
+    const { data }  = await getSingerCategory();
+    countryBtn.value = data.area;
+    sexBtn.value = data.sex;
+    indexBtn.value = data.index;
+    genreBtn.value = data.genre.map((item) => ({
+        text: item.name,
+        value: item.id,
+    }));
+    getSinger();
+});
 </script>
 <style scoped>
 .title {
@@ -162,5 +245,27 @@ onMounted(async()=>{
 .sub-title {
     padding: 16px 0;
     font-size: 20px;
+}
+.btn-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+.singer-list {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.singer-item {
+    width: calc((100% - 80px)/5);
+    text-align: center;
+}
+.singer-img {
+    width: 100%;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    cursor: pointer;
 }
 </style>

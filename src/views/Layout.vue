@@ -6,7 +6,13 @@
                 <div class="header">
                     <Search/>
                     <div class="action">
-                        <VaButton preset="secondary">点击登录</VaButton>
+                        <VaButton v-if="userInfo.nick" round gradient>
+                            <template #append>
+                                <img class="head-pic" :src="userInfo.headpic">
+                            </template>
+                            {{ userInfo.nick }}
+                        </VaButton>
+                        <VaButton v-else preset="secondary">点击登录</VaButton>
                         <MenuList placement="bottom" :items="options" @change-select="select">
                             <VaButton size="large" preset="plain" icon="settings"/>
                         </MenuList>
@@ -40,11 +46,14 @@ import PlayerList from '@/components/PlayerList.vue';
 import MenuList from '@/components/MenuList.vue';
 import { useModal } from 'vuestic-ui';
 import { ref } from 'vue';
-import router from '@/router';
+import { useUserInfo } from '@/store/user';
+import { storeToRefs } from 'pinia';
 
 const playerShow = ref(false);
 
 const max = ref(false);
+
+const { userInfo } = storeToRefs(useUserInfo());
 
 const options = [
     { text: '设置', icon: 'settings', value: 'settings' },
@@ -96,7 +105,7 @@ const onMin = () => {
 .action {
     display: flex;
     align-items: center;
-    width: 200px;
+    width: 240px;
     justify-content: space-between;
 }
 .home {
@@ -129,5 +138,9 @@ const onMin = () => {
 }
 button {
     -webkit-app-region: no-drag;
+}
+.head-pic {
+    width: 25px;
+    border-radius: 12.5px;
 }
 </style>

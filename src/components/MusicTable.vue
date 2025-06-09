@@ -51,7 +51,7 @@
 import MenuList from '@/components/MenuList.vue';
 import { usePlayList } from '@/store/play';
 import { useAudio } from '@/store/audio';
-import { useModal, type DataTableRow, } from 'vuestic-ui';
+import { useModal, useToast, type DataTableRow, } from 'vuestic-ui';
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import MusicPic from "@/components/MusicPic.vue";
@@ -71,7 +71,7 @@ const { init } = useModal();
 
 const store = usePlayList();
 
-const { selectItems, playList }  = storeToRefs(store);
+const { selectItems, playList, playMode }  = storeToRefs(store);
 
 const actionIndex = ref(0);
 
@@ -119,6 +119,13 @@ const selectPlay = async(event: RowClickEvent) => {
                 selectItem(i);
                 const { data } = await getPlayUrl(playList.value[i].id);
                 urls = transformUrls(data.data);
+                if(urls.length === 0) {
+                    useToast().init({
+                        message: "此歌曲需要会员才能播放，自动播放下一首",
+                        color: 'danger',
+                        duration: 2000,
+                    })
+                }
                 i++;
             }
             createAudio(urls);
