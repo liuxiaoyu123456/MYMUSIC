@@ -18,6 +18,12 @@
 ## 功能界面
 > 后端正在开发中，目前只开发了前端本地音乐部分
 <details>
+<summary>登录界面</summary>
+
+![登录页](/src/assets/截图20250609192251.png)
+
+</details>
+<details>
 <summary>本地音乐主页面</summary>
 
 ![主页面](/src/assets/截图20250603025027.png)
