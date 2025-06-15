@@ -2,6 +2,8 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import { useUserInfo } from '@/store/user';
 import { getUserDetail, userRefresh } from '@/api/user';
+import { usePlayList } from '@/store/play';
+import { storeToRefs } from 'pinia';
  
 // 定义路由配置
 const routes = [

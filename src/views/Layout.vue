@@ -7,8 +7,8 @@
                     <Search/>
                     <div class="action">
                         <VaButton v-if="userInfo.nick" round gradient>
-                            <template #append>
-                                <img class="head-pic" :src="userInfo.headpic">
+                            <template #prepend>
+                                <VaAvatar :src="userInfo.headpic" size="25px" />
                             </template>
                             {{ userInfo.nick }}
                         </VaButton>
@@ -132,15 +132,11 @@ const onMin = () => {
     height: calc(100% - 80px);
 }
 .content {
-    padding: 16px 24px 0;
+    padding: 16px 24px 10px;
     height: calc(100% - 68px);
     overflow: auto;
 }
 button {
     -webkit-app-region: no-drag;
-}
-.head-pic {
-    width: 25px;
-    border-radius: 12.5px;
 }
 </style>

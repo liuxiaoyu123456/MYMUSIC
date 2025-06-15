@@ -67,8 +67,12 @@ import { usePlayList } from '@/store/play';
 import { storeToRefs } from 'pinia';
 import { useModal } from 'vuestic-ui';
 import { useAudio } from '@/store/audio';
+import { useRoute } from 'vue-router';
+import { getNetWorkUrls } from '@/utils';
 
 const ipcRenderer = require('electron').ipcRenderer;
+
+const route = useRoute();
 
 const { init } = useModal();
 
@@ -78,7 +82,7 @@ const { deleteItem, selectItem, batchDelete } = store;
 
 const { playMusic, stopMusic, createAudio } = useAudio();
 
-const { playList } = storeToRefs(store);
+const { playList, isLocal } = storeToRefs(store);
 
 const props = defineProps<{
     modelValue: boolean,
@@ -128,13 +132,21 @@ const moreAction = (item) => {
     }
 };
 
-const selectPlay = (item, index: number) => {
+const selectPlay = async(item, index: number) => {
     if(!item.isPlaying) {
         stopMusic();
-        selectItem(index);
-        const { playSrc } = usePlayList();
-        createAudio([playSrc]);
-        playMusic();
+        if(isLocal.value) {
+            selectItem(index);
+            const { playSrc } = usePlayList();
+            createAudio([playSrc]);
+            playMusic();
+        }else {
+            const urls = await getNetWorkUrls(index);
+            if(urls.length!==0) {
+                createAudio(urls);
+                playMusic();
+            }
+        }
     }
 };
 

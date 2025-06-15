@@ -1,5 +1,8 @@
 <template>
     <VaSidebar>
+      <div class="logo">
+        <img src="@/assets/logo.png">
+      </div>
       <div class="sider-title">在线音乐</div>
       <VaSidebarItem
         v-for="item in online"
@@ -90,5 +93,14 @@ const clickMenu = (item: SideBar) => {
 }
 .sider-title:first-child {
   -webkit-app-region: drag;
+}
+.logo {
+  height: 80px;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+}
+img {
+  height: 60px;
 }
 </style>

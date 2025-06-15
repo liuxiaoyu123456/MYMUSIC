@@ -92,11 +92,14 @@ import { ref } from 'vue';
 import { useAudio } from '@/store/audio';
 import { storeToRefs } from 'pinia';
 import { usePlayList } from '@/store/play';
-import { getTime } from '@/utils';
+import { getNetWorkUrls, getTime } from '@/utils';
+import { useRoute } from 'vue-router';
 
 const emit = defineEmits<{
     (e: 'open-list'): void,
 }>()
+
+const route = useRoute();
 
 const store = useAudio();
 const playStore = usePlayList();
@@ -107,7 +110,7 @@ const { paused, volume, currentTime, duration } = storeToRefs(store);
 
 const { nextSing, prevSing } = playStore;
 
-const { singName, singArtist, playCover, playMode } = storeToRefs(playStore)
+const { singName, singArtist, playCover, playMode, order, isLocal } = storeToRefs(playStore)
 
 const volumeProgress = ref(volume.value*100);
 
@@ -147,20 +150,38 @@ const selectPlayMode = (item) => {
     playMode.value = item.value;
 }
 
-const next = () => {
+const next = async() => {
     stopMusic();
     nextSing();
-    const { playSrc } = playStore;
-    createAudio([playSrc]);
-    playMusic();
+    if(isLocal.value) {
+        const { playSrc } = playStore;
+        createAudio([playSrc]);
+        playMusic();
+    }else {
+        const i = order.value;
+        const urls = await getNetWorkUrls(i);
+        if(urls.length) {
+            createAudio(urls);
+            playMusic();
+        }
+    }
 }
 
-const prev = () => {
+const prev = async() => {
     stopMusic();
     prevSing();
-    const { playSrc } = playStore;
-    createAudio([playSrc]);
-    playMusic();
+    if(isLocal.value) {
+        const { playSrc } = playStore;
+        createAudio([playSrc]);
+        playMusic();
+    }else {
+        const i = order.value;
+        const urls = await getNetWorkUrls(i);
+        if(urls.length) {
+            createAudio(urls);
+            playMusic();
+        }
+    }
 }
 
 const changeTime = (val: number) => {

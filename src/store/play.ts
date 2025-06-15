@@ -16,6 +16,7 @@ export const usePlayList = defineStore('play', {
         order: 0,
         playMode: 'repeat',
         selectItems: [],
+        isLocal: false,
     }),
 
     actions: {
@@ -98,10 +99,12 @@ export const usePlayList = defineStore('play', {
 
         addLocaltoPlay() {
             this.playList = [...this.localSongs];
+            this.isLocal = true;
         },
 
         addLiketoPlay() {
             this.playList = [...this.likeLists];
+            this.isLocal = false;
         },
 
         setLike(arr: any[]) {

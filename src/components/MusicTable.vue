@@ -57,13 +57,13 @@ import { storeToRefs } from 'pinia';
 import MusicPic from "@/components/MusicPic.vue";
 import { useRoute } from 'vue-router';
 import { getPlayUrl } from '@/api/song';
-import { transformUrls } from '@/utils';
+import { getNetWorkUrls, transformUrls } from '@/utils';
 
 const route = useRoute();
 
 const ipcRenderer = require('electron').ipcRenderer;
 
-const { selectItem, deleteItem, addLocaltoPlay, addLiketoPlay, nextSing } = usePlayList();
+const { selectItem, deleteItem, addLocaltoPlay, addLiketoPlay, nextSing, randomSing } = usePlayList();
 
 const { createAudio, playMusic, stopMusic } = useAudio();
 
@@ -71,7 +71,7 @@ const { init } = useModal();
 
 const store = usePlayList();
 
-const { selectItems, playList, playMode }  = storeToRefs(store);
+const { selectItems, playList, playMode, isLocal }  = storeToRefs(store);
 
 const actionIndex = ref(0);
 
@@ -105,31 +105,19 @@ const selectPlay = async(event: RowClickEvent) => {
         first.value = false;
     }
     if(!event.item.isPlaying) {
-        if(route.path === '/local') {
-            stopMusic();
+        stopMusic();
+        if(isLocal.value) {
             selectItem(event.itemIndex);
             const { playSrc } = usePlayList();
             createAudio([playSrc]);
             playMusic();
         }else {
-            stopMusic();
-            let urls: string[] = [];
             let i = event.itemIndex;
-            while(urls.length === 0) {
-                selectItem(i);
-                const { data } = await getPlayUrl(playList.value[i].id);
-                urls = transformUrls(data.data);
-                if(urls.length === 0) {
-                    useToast().init({
-                        message: "此歌曲需要会员才能播放，自动播放下一首",
-                        color: 'danger',
-                        duration: 2000,
-                    })
-                }
-                i++;
+            const urls = await getNetWorkUrls(i);
+            if(urls.length!==0) {
+                createAudio(urls);
+                playMusic();
             }
-            createAudio(urls);
-            playMusic();
         }
     }
 };
@@ -199,7 +187,7 @@ const getRowStatus = (row: DataTableRow) => {
 }
 .column {
     text-overflow: ellipsis;
-    width: 400px;
+    width: 300px;
     overflow: hidden;
 }
 </style>

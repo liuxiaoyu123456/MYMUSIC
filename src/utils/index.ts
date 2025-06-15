@@ -1,6 +1,10 @@
 import type { IPicture } from "music-metadata";
 import defaultMusic from "@/assets/music-default.jpg";
 import { getUserDetail } from "@/api/user";
+import { usePlayList } from "@/store/play";
+import { getPlayUrl } from "@/api/song";
+import { useToast } from "vuestic-ui";
+import { storeToRefs } from "pinia";
 
 export const getTime = (data: number) => {
     const seconds = parseInt(data as unknown as string);
@@ -70,4 +74,31 @@ export const transformUrls = (obj: object) => {
     arr.push(obj[item]);
   }
   return arr;
+};
+
+export const getNetWorkUrls = async(i: number) => {
+  const store = usePlayList();
+  const { selectItem } = store;
+  const { playList, playMode } = storeToRefs(store);
+  let urls: string[] = [];
+  while(urls.length === 0) {
+    selectItem(i);
+    const { data } = await getPlayUrl(playList.value[i].id);
+    urls = transformUrls(data.data);
+    if(urls.length === 0) {
+      useToast().init({
+        message: "此歌曲需要会员才能播放，自动播放下一首",
+        color: 'danger',
+        duration: 2000,
+      })
+      if(playMode.value === 'repeat') {
+        i = i === playList.value.length - 1? 0:i+1;
+      }else if(playMode.value === 'random') {
+        i = Math.floor(Math.random() * playList.value.length);
+      }else {
+        break;
+      }
+    }
+  }
+  return urls;
 };

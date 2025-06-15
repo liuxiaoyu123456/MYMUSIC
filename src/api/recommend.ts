@@ -5,9 +5,9 @@ export const dailyRecommend = () => {
     return res;
 };
 
-export const getBanner = () => {
-    const res = axios('/recommend/banner');
-    return res;
+export const getBanner = async() => {
+    const { data }  = await axios('/recommend/banner');
+    return data
 };
 
 export const getRecommendPlaylist = () => {
@@ -17,6 +17,15 @@ export const getRecommendPlaylist = () => {
     })
     return res;
 };
+
+// export const getRecommendPlaylistByCategory = async() => {
+//     const { data } = await axios({
+//         url: '/recommend/playlist',
+//         params: {
+//             id: 
+//         }
+//     })
+// }
 
 export const getNewSongs = () => {
     const res = axios({

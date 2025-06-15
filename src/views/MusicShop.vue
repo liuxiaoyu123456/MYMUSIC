@@ -1,14 +1,17 @@
 <template>
     <div class="title">乐馆</div>
     <Tabs v-model="tab" :items="tabs" />
-        <!-- <VaCarousel
-          v-model="value"
-          :items="items"
-          :indicators="false"
-          class="carousel"
-        /> -->
     <div v-if="tab === 0">
         <!-- 精选 -->
+        <VaCarousel
+          v-if="carouselItems.length"
+          v-model="carouselValue"
+          :items="carouselItems"
+          :indicators="true"
+          fit="fill"
+          autoscroll
+          class="carousel"
+        />
         <Title :title="'官方歌单'" />
         <div class="album">
             <MusicCard
@@ -112,6 +115,19 @@
                 <span style="cursor: pointer;">{{ item.singer_name }}</span>
             </div>
         </div>
+        <BottomLoading
+          @infinite-scroll="infiniteSinger"
+          :disabled="singerList.length === total"
+        />
+    </div>
+    <div v-if="tab === 3">
+        <div class="btn-group">
+            <VaButton
+              preset="primary"
+              v-for="item in PlaylistBtn"
+              style="width: 100px;"
+            >{{ item.name }}</VaButton>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -120,13 +136,19 @@ import MusicCard from '@/components/MusicCard.vue';
 import Title from '@/components/Musicshop/Title.vue';
 import TopMusicCard from '@/components/Musicshop/TopMusicCard.vue';
 import PlayMusicCard from '@/components/Musicshop/PlayMusicCard.vue';
-import { getRecommendPlaylist, getNewSongs } from '@/api/recommend';
+import BottomLoading from '@/components/BottomLoading.vue';
+import { getRecommendPlaylist, getNewSongs, getBanner } from '@/api/recommend';
 import { getTop } from '@/api/top';
+import { getSonglistByCategory, getSonglistCategory } from '@/api/songlist';
 
 import { onMounted, ref, watch } from 'vue';
 import { getSingerCategory, getSingerList } from '@/api/singer';
 
-const tabs = ['精选', '排行', '歌手'];
+const tabs = ['精选', '排行', '歌手', '分类歌单'];
+
+const carouselValue = ref(0);
+
+const carouselItems = ref([]);
 
 const countryBtn = ref([]);
 
@@ -157,7 +179,20 @@ const singerParams = ref({
     genre: -100,
     index: -100,
     sex: -100,
-})
+});
+
+const PlaylistBtn = [
+    { name: '国风', id: 145 },
+    { name: '流行', id: 6},
+    { name: '摇滚', id: 11},
+    { name: '轻音乐', id: 15},
+    { name: '电子', id: 24},
+    { name: '全部'}
+];
+
+const currentPage = ref(1);
+
+const total = ref(0);
 
 const getRecommendAblums = async() => {
     const { data } = await getRecommendPlaylist();
@@ -182,18 +217,39 @@ const getTopList = async() => {
 };
 
 const getSinger = async() => {
-    const { data } = await getSingerList(singerParams.value);
-    singerList.value = data.list;
+    const { data } = await getSingerList({
+        ...singerParams.value,
+        pageNo: currentPage.value,
+    });
+    singerList.value = singerList.value.concat(data.list);
+    total.value = data.total;
+};
+
+const infiniteSinger = () => {
+    currentPage.value = currentPage.value + 1;
+    getSinger();
+};
+
+const getSonglist = async() => {
+    const { data } = await getSonglistByCategory();
+};
+
+const getbannerItems = async() => {
+    const { data } = await getBanner();
+    carouselItems.value = data.map((item)=>(item.picUrl));
 }
 
 watch(
     ()=>singerParams.value, () => {
+        currentPage.value = 1;
+        singerList.value = [];
         getSinger();
     },
     { deep: true }
 )
 
 onMounted(async()=>{
+    getbannerItems();
     getRecommendAblums();
     getNewSongsItems();
     getTopList();
@@ -206,6 +262,8 @@ onMounted(async()=>{
         value: item.id,
     }));
     getSinger();
+    getSonglist();
+    getSonglistCategory();
 });
 </script>
 <style scoped>

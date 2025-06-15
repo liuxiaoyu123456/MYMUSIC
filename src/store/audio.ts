@@ -1,6 +1,7 @@
-import { defineStore } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { Howl } from 'howler';
 import { usePlayList } from "@/store/play";
+import { getNetWorkUrls } from "@/utils";
 
 const { nextSing, randomSing } = usePlayList();
 
@@ -37,7 +38,6 @@ export const useAudio = defineStore('audio', {
                 },
 
                 onplay: () => {
-                    // console.log('开始播放');
                     if(!update) {
                         update = setInterval(()=>{
                             this.currentTime = this.currentTime + 1;
@@ -56,20 +56,35 @@ export const useAudio = defineStore('audio', {
                     this.currentTime = 0;
                 },
 
-                onend: () => {
+                onend: async() => {
                     clearInterval(update!);
                     update = null;
                     this.currentTime = 0;
                     this.paused = true;
-                    const { playMode } = usePlayList();
-                    if(playMode === 'repeat') {
-                        nextSing();
-                    }else if(playMode === 'random') {
-                        randomSing();
+                    const store = usePlayList();
+                    const { playList, playMode, order, isLocal } = storeToRefs(store);
+                    if(isLocal.value) { // 本地音乐
+                        if(playMode.value === 'repeat') {
+                            nextSing();
+                        }else if(playMode.value === 'random') {
+                            randomSing();
+                        }
+                        const { playSrc } = usePlayList();
+                        this.createAudio([playSrc]);
+                        this.playMusic();
+                    }else { // 在线音乐
+                        let i = order.value;
+                        if(playMode.value === 'repeat') {
+                            i = i === playList.value.length-1? 0:i+1;
+                        }else if(playMode.value === 'random') {
+                            i = Math.floor(Math.random() * playList.value.length);
+                        }
+                        const urls = await getNetWorkUrls(i);
+                        if(urls.length !== 0) {
+                            this.createAudio(urls);
+                            this.playMusic();
+                        }
                     }
-                    const { playSrc } = usePlayList();
-                    this.createAudio([playSrc]);
-                    this.playMusic();
                 }
             })
         },
@@ -101,6 +116,5 @@ export const useAudio = defineStore('audio', {
             this.rate = val;
             this.sound?.rate(val);
         }
-    }
-
+    },
 })
