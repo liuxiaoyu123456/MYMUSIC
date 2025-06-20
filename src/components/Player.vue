@@ -1,7 +1,8 @@
 <template>
     <div class="player">
         <div class="sing">
-            <img class="sing-img" :src="playCover">
+            <!-- <img class="sing-img" :src="playCover"> -->
+            <PlayPic :cover="playCover" @full-sreen="fullModal = true;"/>
             <div class="info">
                 <div class="name">
                     <span>{{ singName }}</span>
@@ -84,22 +85,24 @@
       v-model="modal"
       @close="modal = false"
     />
+    <FullScreen
+      v-model="fullModal"
+    />
 </template>
 <script lang="ts" setup>
 import MenuList from '@/components/MenuList.vue';
 import RateModal from '@/components/RateModal.vue';
+import PlayPic from '@/components/PlayPic.vue';
+import FullScreen from '@/components/FullScreen.vue';
 import { ref } from 'vue';
 import { useAudio } from '@/store/audio';
 import { storeToRefs } from 'pinia';
 import { usePlayList } from '@/store/play';
 import { getNetWorkUrls, getTime } from '@/utils';
-import { useRoute } from 'vue-router';
 
 const emit = defineEmits<{
     (e: 'open-list'): void,
 }>()
-
-const route = useRoute();
 
 const store = useAudio();
 const playStore = usePlayList();
@@ -117,6 +120,8 @@ const volumeProgress = ref(volume.value*100);
 const playModeIcon = ref('repeat');
 
 const modal = ref(false);
+
+const fullModal = ref(false);
 
 const open = () => {
     emit('open-list');
@@ -200,12 +205,6 @@ const changeMore = (item) => {
     align-items: center;
     justify-content: space-between;
     width: 150px;
-}
-.sing-img {
-    width: 64px;
-    height: 64px;
-    margin-right: 10px;
-    border-radius: 5px;
 }
 .info {
     display: flex;

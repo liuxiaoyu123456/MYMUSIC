@@ -31,7 +31,6 @@
 </template>
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import SearchInput from '@/components/SearchInput.vue';
 import { useAudio } from '@/store/audio';
 import { usePlayList } from '@/store/play';
 import { type IAudioMetadata } from 'music-metadata';
@@ -43,6 +42,8 @@ const { playMusic, stopMusic, createAudio } = useAudio();
 const { selectItem, batchDelete, setSelectItems } = usePlayList();
 
 const { addPlayItem } = usePlayList();
+
+const keyWord = ref('');
 
 const emit = defineEmits<{
     (e: 'batch-change', value: boolean): void,

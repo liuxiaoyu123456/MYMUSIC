@@ -98,11 +98,17 @@ export const usePlayList = defineStore('play', {
         },
 
         addLocaltoPlay() {
+            this.playList.forEach(item=>{
+                item.isPlaying = false;
+            });
             this.playList = [...this.localSongs];
             this.isLocal = true;
         },
 
         addLiketoPlay() {
+            this.playList.forEach(item=>{
+                item.isPlaying = false;
+            });
             this.playList = [...this.likeLists];
             this.isLocal = false;
         },

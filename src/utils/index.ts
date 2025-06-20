@@ -91,6 +91,7 @@ export const getNetWorkUrls = async(i: number) => {
         color: 'danger',
         duration: 2000,
       })
+      await new Promise(resolve => setTimeout(resolve, 2000));
       if(playMode.value === 'repeat') {
         i = i === playList.value.length - 1? 0:i+1;
       }else if(playMode.value === 'random') {

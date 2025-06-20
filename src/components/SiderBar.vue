@@ -1,4 +1,5 @@
 <template>
+  <div class="sider">
     <VaSidebar>
       <div class="logo">
         <img src="@/assets/logo.png">
@@ -45,6 +46,8 @@
           </template>
       </VaCollapse>
     </VaSidebar>
+  </div>
+    
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
@@ -91,14 +94,13 @@ const clickMenu = (item: SideBar) => {
     padding-left: 20px;
     line-height: 58px;
 }
-.sider-title:first-child {
-  -webkit-app-region: drag;
-}
 .logo {
   height: 80px;
   display: flex;
   align-items: end;
   justify-content: center;
+  flex-shrink: 0;
+  -webkit-app-region: drag;
 }
 img {
   height: 60px;
