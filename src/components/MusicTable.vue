@@ -63,7 +63,7 @@ const route = useRoute();
 
 const ipcRenderer = require('electron').ipcRenderer;
 
-const { selectItem, deleteItem, addLocaltoPlay, addLiketoPlay, nextSing, randomSing } = usePlayList();
+const { selectItem, deleteItem, addLocaltoPlay, addLiketoPlay } = usePlayList();
 
 const { createAudio, playMusic, stopMusic } = useAudio();
 
@@ -71,7 +71,7 @@ const { init } = useModal();
 
 const store = usePlayList();
 
-const { selectItems, isLocal, commentCount }  = storeToRefs(store);
+const { selectItems, isLocal, songId }  = storeToRefs(store);
 
 const actionIndex = ref(0);
 
@@ -119,8 +119,8 @@ const selectPlay = async(event: RowClickEvent) => {
                 playMusic();
             }
         }
-        const data = await getComments(event.item.songid);
-        commentCount.value = data;
+        songId.value = event.item.songid;
+        // const data = await getComments(event.item.songid);
     }
 };
 

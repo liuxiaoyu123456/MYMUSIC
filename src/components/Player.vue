@@ -9,8 +9,8 @@
                 </div>
                 <div class="btn-list">
                     <VaButton preset="secondary" icon="favorite_border"/>
-                    <VaBadge overlap v-bind:text="total === 0? '' : total" placement="bottom-end" :offset="[-5,-5]">
-                        <VaButton preset="secondary" icon="comment"/>
+                    <VaBadge overlap v-bind:text="total" :offset="[-10,5]">
+                        <VaButton preset="secondary" icon="comment" @click="toComment"/>
                     </VaBadge>
                     <MenuList placement="top" :items="options" @change-select="changeMore">
                         <VaButton preset="secondary" icon="more_horiz"/>
@@ -97,14 +97,18 @@ import { ref, watch } from 'vue';
 import { useAudio } from '@/store/audio';
 import { storeToRefs } from 'pinia';
 import { usePlayList } from '@/store/play';
-import { getNetWorkUrls, getTime } from '@/utils';
+import { getComments, getNetWorkUrls, getTime } from '@/utils';
+import { useRouter } from 'vue-router';
 
 const emit = defineEmits<{
     (e: 'open-list'): void,
 }>()
 
 const store = useAudio();
+
 const playStore = usePlayList();
+
+const router = useRouter();
 
 const { setVolume, stopMusic, playMusic, pauseMusic, createAudio, seekMusic } = store;
 
@@ -112,7 +116,7 @@ const { paused, volume, currentTime, duration } = storeToRefs(store);
 
 const { nextSing, prevSing } = playStore;
 
-const { singName, singArtist, playCover, playMode, order, isLocal, commentCount } = storeToRefs(playStore)
+const { singName, singArtist, playCover, playMode, order, isLocal, songId } = storeToRefs(playStore)
 
 let total: number | string = '';
 
@@ -200,10 +204,21 @@ const changeMore = (item) => {
     }
 }
 
+const toComment = () => {
+    router.push({
+        path: '/comment',
+        query: {
+            id: songId.value,
+        }
+    })
+}
+
 watch(
-    () => commentCount.value, (val) => {
-        total = val > 99? '99+' : val;
-    }
+    () => songId.value, async(val) => {
+        const data = await getComments(val);
+        total = data > 999? '999+' : data;
+    },
+    { immediate: true }
 )
 </script>
 <style scoped>
@@ -222,16 +237,17 @@ watch(
 }
 .name {
     font-size: 14px;
-    margin-bottom: 5px;
+    /* margin-bottom: 5px; */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    height: 20px;
 }
 .btn-list {
     justify-content: space-between;
     display: flex;
     align-items: center;
-    width: 100px;
+    width: 120px;
 }
 .player {
     padding: 8px;

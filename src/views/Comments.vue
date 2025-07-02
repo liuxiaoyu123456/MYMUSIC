@@ -1,9 +1,22 @@
 <template>
     <div class="comment">
         <Tabs :items="commentItems" />
-        <VaTextarea v-model="comment" class="text-area" preset="solid" max-length="300" counter/>
-        <VaButton preset="secondary" icon="tag_faces"/>
-        <VaButton preset="secondary" icon="publish">发表</VaButton>
+        <VaTextarea
+          v-model="comment"
+          class="text-area"
+          preset="solid" 
+          max-length="300"
+          counter
+          max-rows="4"
+          min-rows="4"
+          :autosize="true"
+          placeholder="期待你的评论"
+        />
+        <div class="btn">
+            <VaButton preset="secondary" icon="tag_faces"/>
+            <VaButton preset="secondary">发布</VaButton>
+        </div>
+        
         <CommentItem/>
     </div>
 </template>
@@ -21,5 +34,10 @@ const comment = ref('');
 .text-area {
     width: 100%;
     margin-top: 20px;
+    position: relative;
+}
+.btn {
+    display: flex;
+    justify-content: end;
 }
 </style>

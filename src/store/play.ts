@@ -17,7 +17,7 @@ export const usePlayList = defineStore('play', {
         playMode: 'repeat',
         selectItems: [],
         isLocal: false,
-        commentCount: 1,
+        songId: 0,
     }),
 
     actions: {
