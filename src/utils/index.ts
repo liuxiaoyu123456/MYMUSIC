@@ -6,6 +6,7 @@ import { getPlayUrl } from "@/api/song";
 import { useToast } from "vuestic-ui";
 import { storeToRefs } from "pinia";
 import { getComment } from "@/api/comment";
+import moment from 'moment';
 
 export const getTime = (data: number) => {
     const seconds = parseInt(data as unknown as string);
@@ -108,6 +109,10 @@ export const getNetWorkUrls = async(i: number) => {
 export const getComments = async(id: number) => {
   const { data } = await getComment(id);
   const count = data.comment.commenttotal;
-  // console.log(count);
   return count;
+}
+
+export const formatteTime  = (num: number) => {
+  const time = moment(num*1000).format('YYYY-MM-DD HH:mm:ss');
+  return time;
 }

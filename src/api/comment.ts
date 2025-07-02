@@ -8,7 +8,7 @@ export const getComment = async(id: number, pageNo?: number, pageSize?: number, 
             id,
             pageNo,
             pageSize,
-            type,
+            type: 0,
             biztype,
         }
     })

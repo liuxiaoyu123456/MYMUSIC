@@ -114,6 +114,7 @@ const onMin = () => {
     display: flex;
     overflow: hidden;
     position: relative;
+    font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;
 }
 .conten-box {
     flex: 1;
