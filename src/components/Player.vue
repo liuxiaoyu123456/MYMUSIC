@@ -1,7 +1,6 @@
 <template>
     <div class="player">
         <div class="sing">
-            <!-- <img class="sing-img" :src="playCover"> -->
             <PlayPic :cover="playCover" @full-sreen="fullModal = true;"/>
             <div class="info">
                 <div class="name">
@@ -9,12 +8,12 @@
                     <span class="singer">-{{ singArtist }}</span>
                 </div>
                 <div class="btn-list">
-                    <VaButton preset="secondary" icon="favorite_border" size="small"/>
-                    <VaBadge overlap text="5" placement="bottom-end" style="--va-badge-text-wrapper-border-radius: 50%;">
-                        <VaButton preset="secondary" icon="comment" size="small"/>
+                    <VaButton preset="secondary" icon="favorite_border"/>
+                    <VaBadge overlap v-bind:text="total === 0? '' : total" placement="bottom-end" :offset="[-5,-5]">
+                        <VaButton preset="secondary" icon="comment"/>
                     </VaBadge>
                     <MenuList placement="top" :items="options" @change-select="changeMore">
-                        <VaButton preset="secondary" icon="more_horiz" size="small"/>
+                        <VaButton preset="secondary" icon="more_horiz"/>
                     </MenuList>
                 </div>
             </div>
@@ -94,7 +93,7 @@ import MenuList from '@/components/MenuList.vue';
 import RateModal from '@/components/RateModal.vue';
 import PlayPic from '@/components/PlayPic.vue';
 import FullScreen from '@/components/FullScreen.vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useAudio } from '@/store/audio';
 import { storeToRefs } from 'pinia';
 import { usePlayList } from '@/store/play';
@@ -113,7 +112,9 @@ const { paused, volume, currentTime, duration } = storeToRefs(store);
 
 const { nextSing, prevSing } = playStore;
 
-const { singName, singArtist, playCover, playMode, order, isLocal } = storeToRefs(playStore)
+const { singName, singArtist, playCover, playMode, order, isLocal, commentCount } = storeToRefs(playStore)
+
+let total: number | string = '';
 
 const volumeProgress = ref(volume.value*100);
 
@@ -198,6 +199,12 @@ const changeMore = (item) => {
         modal.value = true;
     }
 }
+
+watch(
+    () => commentCount.value, (val) => {
+        total = val > 99? '99+' : val;
+    }
+)
 </script>
 <style scoped>
 .action {
@@ -209,11 +216,16 @@ const changeMore = (item) => {
 .info {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 50px;
+    justify-content: center;
+    height: 64px;
+    overflow: hidden;
 }
 .name {
     font-size: 14px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .btn-list {
     justify-content: space-between;
@@ -273,6 +285,9 @@ const changeMore = (item) => {
 }
 :deep(.va-slider__handler__dot--value) {
     color: black !important;
+}
+:deep(.va-badge--floating .va-badge__text-wrapper) {
+    z-index: 1;
 }
 .singer {
     color: rgba(0, 0, 0, 0.55);

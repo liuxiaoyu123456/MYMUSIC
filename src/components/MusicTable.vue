@@ -57,7 +57,7 @@ import { storeToRefs } from 'pinia';
 import MusicPic from "@/components/MusicPic.vue";
 import { useRoute } from 'vue-router';
 import { getPlayUrl } from '@/api/song';
-import { getNetWorkUrls, transformUrls } from '@/utils';
+import { getNetWorkUrls, getComments } from '@/utils';
 
 const route = useRoute();
 
@@ -71,7 +71,7 @@ const { init } = useModal();
 
 const store = usePlayList();
 
-const { selectItems, playList, playMode, isLocal }  = storeToRefs(store);
+const { selectItems, isLocal, commentCount }  = storeToRefs(store);
 
 const actionIndex = ref(0);
 
@@ -119,6 +119,8 @@ const selectPlay = async(event: RowClickEvent) => {
                 playMusic();
             }
         }
+        const data = await getComments(event.item.songid);
+        commentCount.value = data;
     }
 };
 

@@ -17,6 +17,7 @@ export const usePlayList = defineStore('play', {
         playMode: 'repeat',
         selectItems: [],
         isLocal: false,
+        commentCount: 1,
     }),
 
     actions: {
@@ -117,6 +118,7 @@ export const usePlayList = defineStore('play', {
             arr.forEach((item) => {
                 const like = {
                     id: item.songmid,
+                    songid: item.songid,
                     sing: item.songname,
                     column: item.albumname,
                     length: getTime(item.interval),

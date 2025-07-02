@@ -5,11 +5,6 @@
     background-color="#121212"
     no-padding
   >
-    <!-- <template #header>
-      <div class="header">
-
-      </div>
-    </template> -->
     <div class="content">
         
     </div>

@@ -1,4 +1,3 @@
-<!-- 播放列表 -->
 <template>
     <div class="player-list">
         <VaSidebar :model-value="modelValue" animated="right" width="450px" style="overflow: hidden;">
