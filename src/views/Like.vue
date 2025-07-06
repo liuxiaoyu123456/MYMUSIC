@@ -2,12 +2,6 @@
     <div class="like">
         <div v-if="!batchMode" class="title">喜欢</div>
         <Tabs v-if="!batchMode" :items="likeItems" class="tab"/>
-        <!-- <div class="empty">
-          <div class="box">
-            <VaIcon name="audio_file" class="primary" size="120px"/>
-            <div>暂时没有歌曲</div>
-          </div>
-        </div> -->
         <MusicTable
           :items="likeLists"
           :columns="columns"
