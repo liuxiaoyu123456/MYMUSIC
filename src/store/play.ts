@@ -18,6 +18,7 @@ export const usePlayList = defineStore('play', {
         selectItems: [],
         isLocal: false,
         songId: 0,
+        songmid: 0,
     }),
 
     actions: {

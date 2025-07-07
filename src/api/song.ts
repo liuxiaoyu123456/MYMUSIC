@@ -18,4 +18,15 @@ export const getPlayUrl = (songmid: string) => {
         }
     })
     return res;
-}
+};
+
+export const downloadMusic = async(id: string, type: string) => {
+    const { data } = await axios({
+        url: '/song/url',
+        params: {
+            id,
+            type,
+        }
+    })
+    return data;
+};

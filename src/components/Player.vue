@@ -93,6 +93,10 @@
       v-model="modal"
       @close="modal = false"
     />
+    <DownloadModal
+      v-model="downloadModal"
+      @close = "downloadModal = false"
+    />
     <FullScreen
       v-model="fullModal"
     />
@@ -102,6 +106,7 @@ import MenuList from '@/components/MenuList.vue';
 import RateModal from '@/components/RateModal.vue';
 import PlayPic from '@/components/PlayPic.vue';
 import FullScreen from '@/components/FullScreen.vue';
+import DownloadModal from '@/components/DownloadModal.vue';
 import { ref, watch } from 'vue';
 import { useAudio } from '@/store/audio';
 import { storeToRefs } from 'pinia';
@@ -136,6 +141,8 @@ const playModeIcon = ref('repeat');
 const modal = ref(false);
 
 const fullModal = ref(false);
+
+const downloadModal = ref(false);
 
 const open = () => {
     emit('open-list');
@@ -207,9 +214,11 @@ const changeTime = (val: number) => {
     seekMusic(val);
 }
 
-const changeMore = (item) => {
+const changeMore = async(item) => {
     if(item.value === 'speed') {
         modal.value = true;
+    }else if(item.value === 'download') {
+        downloadModal.value = true;
     }
 }
 

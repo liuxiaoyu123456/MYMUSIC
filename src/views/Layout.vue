@@ -71,7 +71,8 @@ const select = (item: any) => {
             message: '有任何问题联系邮箱：2717617783@qq.com',
             title: '帮助',
             okText: '确定',
-            cancelText: '取消'
+            cancelText: '取消',
+            size: 'small'
         });
     }else if(item.value === 'logout') {
         confirm({

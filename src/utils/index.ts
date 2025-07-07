@@ -115,4 +115,4 @@ export const getComments = async(id: number) => {
 export const formatteTime  = (num: number) => {
   const time = moment(num*1000).format('YYYY-MM-DD HH:mm:ss');
   return time;
-}
+};

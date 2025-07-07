@@ -71,7 +71,7 @@ const { init } = useModal();
 
 const store = usePlayList();
 
-const { selectItems, isLocal, songId }  = storeToRefs(store);
+const { selectItems, isLocal, songId, songmid }  = storeToRefs(store);
 
 const actionIndex = ref(0);
 
@@ -120,7 +120,7 @@ const selectPlay = async(event: RowClickEvent) => {
             }
         }
         songId.value = event.item.songid;
-        // const data = await getComments(event.item.songid);
+        songmid.value = event.item.id;
     }
 };
 

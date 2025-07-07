@@ -1,6 +1,6 @@
 <template>
     <VaModal
-      :model-value="modelValue"
+      :model-value="props.modelValue"
       ok-text="确定"
       cancel-text="取消"
       title="请选择倍速"

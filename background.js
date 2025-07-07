@@ -7,6 +7,8 @@ const dialog = electron.dialog
 const shell = electron.shell
 const mm = require('music-metadata');
 const fs = require('fs');
+const https = require('https');
+const http = require('http');
 
 // 屏蔽安全警告
 // ectron Security Warning (Insecure Content-Security-Policy)
@@ -71,6 +73,10 @@ const createWindow = () => {
     ipcMain.on('watch-file', (event, file) => {
         shell.showItemInFolder(file)
     })
+
+    ipcMain.on('download-file', (event, fileUrl, fileName, win) => {
+        downloadFile(fileUrl, fileName, win);
+    });
 }
 
 app.whenReady().then(() => {
@@ -78,10 +84,44 @@ app.whenReady().then(() => {
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
-})
+});
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
-})
+});
+
+const downloadFile = (audioUrl, fileName, mainWindow) => {
+    const filePath = `C:/Users/Lenovo/Music/${fileName}`;
+    // 创建写入流
+    const file = fs.createWriteStream(filePath);
+    const request = http.get(audioUrl, (response) => {
+        response.pipe(file);
+
+        file.on('finish', () => {
+            file.close();
+            dialog.showMessageBox(mainWindow, {
+                type: 'info',
+                title: '下载完成',
+                message: `文件已成功下载到 ${filePath}`,
+            });
+        });
+
+        response.on('error', (err) => {
+            dialog.showMessageBox(mainWindow, {
+                type: 'error',
+                title: '下载失败',
+                message: `下载失败: ${err.message}`,
+            });
+        });
+    });
+    
+    request.on('error', (err) => {
+        dialog.showMessageBox(mainWindow, {
+            type: 'error',
+            title: '请求失败',
+            message: `请求失败: ${err.message}`,
+        });
+    });
+};
 
 
