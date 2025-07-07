@@ -8,9 +8,18 @@
                     <span class="singer">-{{ singArtist }}</span>
                 </div>
                 <div class="btn-list">
-                    <VaButton preset="secondary" icon="favorite_border"/>
+                    <VaButton
+                      preset="secondary"
+                      icon="favorite_border"
+                      :disabled="isLocal"
+                    />
                     <VaBadge overlap v-bind:text="total" :offset="[-10,5]">
-                        <VaButton preset="secondary" icon="comment" @click="toComment"/>
+                        <VaButton
+                          preset="secondary"
+                          icon="comment"
+                          @click="toComment"
+                          :disabled="isLocal"
+                        />
                     </VaBadge>
                     <MenuList placement="top" :items="options" @change-select="changeMore">
                         <VaButton preset="secondary" icon="more_horiz"/>
@@ -215,8 +224,12 @@ const toComment = () => {
 
 watch(
     () => songId.value, async(val) => {
-        const data = await getComments(val);
-        total = data > 999? '999+' : data;
+        if(!isLocal.value) {
+            const data = await getComments(val);
+            total = data > 999? '999+' : data;
+        }else {
+            total = '';
+        }
     },
     { immediate: true }
 )
