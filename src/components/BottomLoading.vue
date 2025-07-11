@@ -19,7 +19,7 @@ const bottom = ref();
 
 const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !props.disabled) {
             emit('infinite-scroll');
         }
     });
