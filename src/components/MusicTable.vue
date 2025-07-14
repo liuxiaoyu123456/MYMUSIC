@@ -18,7 +18,7 @@
                 <div>
                     <div>
                         {{ value.rowData.sing }}
-                        <span v-if="value.rowData.vid" class="mv-icon" @click="toVideo(value.rowData.vid)">
+                        <span v-if="value.rowData.vid" class="mv-icon" @click="toVideo($event, value.rowData.vid)">
                             <VaIcon name="play_arrow" size="14px"></VaIcon>
                         </span>
                     </div>

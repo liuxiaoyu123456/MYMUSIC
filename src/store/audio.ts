@@ -117,4 +117,8 @@ export const useAudio = defineStore('audio', {
             this.sound?.rate(val);
         }
     },
+
+    persist: {
+        volume: localStorage,
+    }
 })

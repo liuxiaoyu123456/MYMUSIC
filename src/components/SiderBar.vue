@@ -89,6 +89,10 @@ const clickMenu = (item: SideBar) => {
 }
 </script>
 <style scoped>
+.sider {
+  position: relative;
+  /* z-index: 0; */
+}
 .sider-title {
     height: 58px;
     padding-left: 20px;
