@@ -52,6 +52,11 @@ const routes = [
                 path: '/local',
                 name: 'Local',
                 component: () => import('@/views/Local.vue'),
+            },
+            {
+                path: '/mv',
+                name: 'Movie',
+                component: () => import('@/views/Movie.vue'),
             }
         ]
     }

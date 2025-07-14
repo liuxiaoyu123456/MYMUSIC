@@ -16,7 +16,6 @@
             <VaButton preset="secondary" icon="tag_faces"/>
             <VaButton preset="secondary">发布</VaButton>
         </div>
-        <!-- <div class="comment-title">近期热评</div> -->
         <div class="comment-title">全部评论</div> 
         <CommentItem v-for="item in commentList" :data="item"/>
         <BottomLoading

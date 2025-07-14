@@ -1,7 +1,7 @@
 <template>
     <div v-if="!batchMode" class="title">本地和下载</div>
     <Tabs v-if="!batchMode" :items="tabs"/>
-    <ButtonList @batch-change="changeBatch"/>
+    <ButtonList @batch-change="changeBatch" @search="searchSongs"/>
     <MusicTable
       :items="localSongs"
       :columns="columns"
@@ -13,12 +13,15 @@ import Tabs from '@/components/Tabs.vue';
 import MusicTable from '@/components/MusicTable.vue';
 import ButtonList from '@/components/ButtonList.vue';
 import { usePlayList } from '@/store/play';
+import { fuzzySearch } from '@/utils';
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 
 const store = usePlayList();
 
 const { localSongs } = storeToRefs(store);
+
+let initLists = localSongs.value;
 
 const tabs = ['本地歌曲','下载歌曲','正在下载'];
 
@@ -34,6 +37,10 @@ const batchMode = ref(false);
 
 const changeBatch = (val: boolean) => {
     batchMode.value = val;
+};
+
+const searchSongs = (val: string) => {
+    localSongs.value = fuzzySearch(initLists, val);
 };
 </script>
 <style scoped>

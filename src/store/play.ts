@@ -125,6 +125,7 @@ export const usePlayList = defineStore('play', {
                     length: getTime(item.interval),
                     picSrc: getNetworkImage(item.albummid),
                     artist: getArtist(item.singer),
+                    vid: item.vid,
                     isPlaying: false,
                 }
                 this.likeLists.push(like);

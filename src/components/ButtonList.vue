@@ -12,6 +12,7 @@
           placeholder="搜索音乐"
           preset="solid"
           clearable
+          @keydown="searchMusic"
         >
             <template #prependInner>
                 <VaIcon
@@ -47,6 +48,7 @@ const keyWord = ref('');
 
 const emit = defineEmits<{
     (e: 'batch-change', value: boolean): void,
+    (e: 'search', value: string): void,
 }>();
 
 const batchAction = ref(false);
@@ -91,11 +93,25 @@ const play = () => {
     const { playSrc } = usePlayList();
     createAudio([playSrc]);
     playMusic();
-}
+};
+
+const searchMusic = (e: KeyboardEvent) => {
+    if(e.key === 'Enter') {
+        emit('search', keyWord.value);
+    }
+};
 
 watch(
     () => batchAction.value, (newValue) => {
         emit('batch-change', newValue);
+    }
+)
+
+watch(
+    () => keyWord.value, (val) => {
+        if(!val) {
+            emit('search', val)
+        }
     }
 )
 </script>

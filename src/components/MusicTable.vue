@@ -16,7 +16,12 @@
             <div class="cell">
                 <MusicPic :picSrc="value.rowData.picSrc" :load="value.rowData.isPlaying"/>
                 <div>
-                    <div>{{ value.rowData.sing }}</div>
+                    <div>
+                        {{ value.rowData.sing }}
+                        <span v-if="value.rowData.vid" class="mv-icon" @click="toVideo(value.rowData.vid)">
+                            <VaIcon name="play_arrow" size="14px"></VaIcon>
+                        </span>
+                    </div>
                     <div class="singer" :class="{ blue: value.rowData.isPlaying}">
                         {{ value.rowData.artist }}
                     </div>
@@ -51,13 +56,14 @@
 import MenuList from '@/components/MenuList.vue';
 import { usePlayList } from '@/store/play';
 import { useAudio } from '@/store/audio';
-import { useModal, useToast, type DataTableRow, } from 'vuestic-ui';
+import { useModal, type DataTableRow, } from 'vuestic-ui';
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import MusicPic from "@/components/MusicPic.vue";
 import { useRoute } from 'vue-router';
 import { getPlayUrl } from '@/api/song';
 import { getNetWorkUrls, getComments } from '@/utils';
+import router from '@/router';
 
 const route = useRoute();
 
@@ -163,6 +169,16 @@ const getRowStatus = (row: DataTableRow) => {
           class: ["playClass"]
         };
     }
+};
+
+const toVideo = (e: Event, id: string) => {
+    e.stopPropagation();
+    router.push({
+        path: '/mv',
+        query: {
+            id,
+        }
+    })
 }
 </script>
 <style scoped>
@@ -186,6 +202,16 @@ const getRowStatus = (row: DataTableRow) => {
 :deep(.playClass) {
     color: var(--va-primary);
     background-color: rgba(44, 130, 224, 0.1);
+}
+.mv-icon {
+    border: var(--va-primary) 1px solid;
+    color: var(--va-primary);
+    padding: 0px 4px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 2px;
+    cursor: pointer;
+    margin-left: 5px;
 }
 .column {
     text-overflow: ellipsis;

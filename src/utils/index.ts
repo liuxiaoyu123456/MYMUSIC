@@ -116,3 +116,15 @@ export const formatteTime  = (num: number) => {
   const time = moment(num*1000).format('YYYY-MM-DD HH:mm:ss');
   return time;
 };
+
+export const fuzzySearch = (arr: any, keyword: string, fields = []) => {
+  if (!keyword) return arr;
+  const kw = String(keyword).toLowerCase();
+
+  return arr.filter(item =>
+    (fields.length ? fields : Object.keys(item)).some(key => {
+      const val = item[key];
+      return val != null && String(val).toLowerCase().includes(kw);
+    })
+  );
+};
