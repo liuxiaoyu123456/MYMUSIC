@@ -117,6 +117,11 @@ export const formatteTime  = (num: number) => {
   return time;
 };
 
+export const formatteDate = (num: number) => {
+  const date = moment(num*1000).format('YYYY-MM-DD');
+  return date;
+};
+
 export const fuzzySearch = (arr: any, keyword: string, fields = []) => {
   if (!keyword) return arr;
   const kw = String(keyword).toLowerCase();
@@ -127,4 +132,8 @@ export const fuzzySearch = (arr: any, keyword: string, fields = []) => {
       return val != null && String(val).toLowerCase().includes(kw);
     })
   );
+};
+
+export const getMvSingers = (arr: any): string => {
+  return arr.map((item: any) => item.name).join(',');
 };
