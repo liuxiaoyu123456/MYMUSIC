@@ -57,6 +57,11 @@ const routes = [
                 path: '/mv',
                 name: 'Movie',
                 component: () => import('@/views/Movie.vue'),
+            },
+            {
+                path: '/settings',
+                name: 'Settings',
+                component: () => import('@/views/Setting.vue'),
             }
         ]
     }

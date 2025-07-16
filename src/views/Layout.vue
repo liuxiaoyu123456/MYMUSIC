@@ -48,6 +48,7 @@ import { useModal } from 'vuestic-ui';
 import { ref } from 'vue';
 import { useUserInfo } from '@/store/user';
 import { storeToRefs } from 'pinia';
+import router from '@/router';
 
 const playerShow = ref(false);
 
@@ -66,24 +67,29 @@ const options = [
 const { confirm, init } = useModal();
 
 const select = (item: any) => {
-    if(item.value === 'help') {
-        init({
-            message: '有任何问题联系邮箱：2717617783@qq.com',
-            title: '帮助',
-            okText: '确定',
-            cancelText: '取消',
-            size: 'small'
-        });
-    }else if(item.value === 'logout') {
-        confirm({
-            message: '确定退出登录吗?',
-            title: '确定',
-            okText: '确定',
-            cancelText: '取消'
-        })
-        .then((ok)=>{
-            
-        })
+    switch(item.value) {
+        case 'help':
+            init({
+                message: '有任何问题联系邮箱：2717617783@qq.com',
+                title: '帮助',
+                okText: '确定',
+                cancelText: '取消',
+                size: 'small'
+            });
+        break;
+        case 'logout':
+            confirm({
+                message: '确定退出登录吗?',
+                title: '确定',
+                okText: '确定',
+                cancelText: '取消'
+            })
+            .then((ok)=>{
+                
+            })
+        break;
+        case 'settings':
+            router.push('/settings');
     }
 }
 
