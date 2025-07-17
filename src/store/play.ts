@@ -38,18 +38,18 @@ export const usePlayList = defineStore('play', {
         selectItem(num: number) {
             // 设置播放状态
             this.playList.forEach((item, index)=>{
-                if(index === num) {
+                if(item.id === num) {
                     item.isPlaying = true;
+                    this.order = index;
                 }else {
                     item.isPlaying = false;
                 }
             })
-            this.order = num;
             if(this.playList.length > 0){
-                this.playSrc = this.playList[num].url || '';
-                this.singName = this.playList[num].sing;
-                this.singArtist = this.playList[num].artist;
-                this.playCover = this.playList[num].picSrc;
+                this.playSrc = this.playList[this.order].url || '';
+                this.singName = this.playList[this.order].sing;
+                this.singArtist = this.playList[this.order].artist;
+                this.playCover = this.playList[this.order].picSrc;
             }
         },
 
@@ -64,8 +64,8 @@ export const usePlayList = defineStore('play', {
             }else {
                 this.order = this.order + 1;
             }
-
-            this.selectItem(this.order);
+            const id = this.playList[this.order].id;
+            this.selectItem(id);
         },
 
         prevSing() {
@@ -74,14 +74,15 @@ export const usePlayList = defineStore('play', {
             }else {
                 this.order = this.order - 1;
             }
-
-            this.selectItem(this.order);
+            const id = this.playList[this.order].id;
+            this.selectItem(id);
         },
 
         randomSing() {
             const randomIndex = Math.floor(Math.random() * this.playList.length);
             this.order = randomIndex;
-            this.selectItem(this.order);
+            const id = this.playList[this.order].id;
+            this.selectItem(id);
         },
 
         batchDelete(deleteItems?: any[]) {

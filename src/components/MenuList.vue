@@ -3,7 +3,7 @@
         <template #anchor>
             <slot></slot>
         </template>
-        <VaMenuItem v-for="item in props.items" @selected="emit('change-select', item)">
+        <VaMenuItem :disabled="item.disabled" v-for="item in props.items" @selected="emit('change-select', item)">
             <div class="item">
                 <VaIcon v-if="item.icon" :name="item.icon"/>
                 <font-awesome-icon v-else :icon="item.fa" />

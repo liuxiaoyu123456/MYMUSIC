@@ -1,4 +1,5 @@
 import { defineStore, storeToRefs } from "pinia";
+
 import { Howl } from 'howler';
 import { usePlayList } from "@/store/play";
 import { getNetWorkUrls } from "@/utils";
@@ -90,6 +91,10 @@ export const useAudio = defineStore('audio', {
         },
 
         playMusic() {
+            if(!this.sound) {
+                const { playSrc } = usePlayList();
+                this.createAudio([playSrc]);
+            }
             this.sound?.play();
             this.paused = false;
         },
@@ -119,6 +124,8 @@ export const useAudio = defineStore('audio', {
     },
 
     persist: {
-        volume: localStorage,
+        key: 'audioPinia',
+        storage: localStorage,
+        pick: ['volume'],
     }
 })

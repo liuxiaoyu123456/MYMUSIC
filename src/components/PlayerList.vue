@@ -46,7 +46,7 @@
                                 <span class="sing-name">{{ item.sing }}</span>
                             </div>
                             <div class="btn-list">
-                                <VaButton icon="favorite_outline" preset="secondary"/>
+                                <VaButton icon="favorite_outline" preset="secondary" :disabled="isLocal"/>
                                  <MenuList placement = "right" :items="moreOptions" @change-select="moreAction">
                                     <VaButton @click="more($event, index)" icon="more_horiz" preset="secondary"/>
                                 </MenuList>
@@ -77,9 +77,11 @@ const { init } = useModal();
 
 const store = usePlayList();
 
-const { deleteItem, selectItem, batchDelete } = store;
+const musicStore = useAudio();
 
-const { playMusic, stopMusic, createAudio } = useAudio();
+const { playMusic, stopMusic, createAudio } = musicStore;
+
+const { deleteItem, selectItem, batchDelete } = store;
 
 const { playList, isLocal } = storeToRefs(store);
 

@@ -47,7 +47,7 @@
                 <VaButton @click="add" icon="add_circle_outline" preset="secondary"/>
             </MenuList>
             <MenuList placement = "right" :items="moreOptions" @change-select="moreAction">
-                <VaButton @click="more($event, value.rowIndex)" icon="more_horiz" preset="secondary"/>
+                <VaButton @click="more($event, value.rowData.id)" icon="more_horiz" preset="secondary"/>
             </MenuList>
         </template>
     </VaDataTable>
@@ -57,12 +57,11 @@ import MenuList from '@/components/MenuList.vue';
 import { usePlayList } from '@/store/play';
 import { useAudio } from '@/store/audio';
 import { useModal, type DataTableRow, } from 'vuestic-ui';
-import { ref } from 'vue';
+import { watch, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import MusicPic from "@/components/MusicPic.vue";
 import { useRoute } from 'vue-router';
-import { getPlayUrl } from '@/api/song';
-import { getNetWorkUrls, getComments } from '@/utils';
+import { getNetWorkUrls } from '@/utils';
 import router from '@/router';
 
 const route = useRoute();
@@ -79,9 +78,11 @@ const store = usePlayList();
 
 const { selectItems, isLocal, songId, songmid }  = storeToRefs(store);
 
-const actionIndex = ref(0);
+const actionId = ref(0);
 
 const first = ref(true);
+
+// const disabled = ref(true);
 
 const props = defineProps<{ 
     items: any[],
@@ -94,12 +95,13 @@ const addOptions = [
     { text: '播放列表', value: 'play_list', icon: 'playlist_play' }
 ];
 
-const moreOptions = [
+const moreOptions =ref([
     { text: '播放', value: 'play', icon: 'play_circle_outline' },
     { text: '删除', value: 'delete', icon: 'delete_outline' },
+    { text: '添加到', value: 'add', icon: 'add_circle_outline' },
     { text: '浏览本地文件', value: 'watch', icon: 'folder_open' },
     { text: '查看评论', value: 'comment', icon: 'comment' },
-];
+]);
 
 const selectPlay = async(event: RowClickEvent) => {
     if(first.value) {
@@ -113,7 +115,7 @@ const selectPlay = async(event: RowClickEvent) => {
     if(!event.item.isPlaying) {
         stopMusic();
         if(isLocal.value) {
-            selectItem(event.itemIndex);
+            selectItem(event.item.id);
             const { playSrc } = usePlayList();
             createAudio([playSrc]);
             playMusic();
@@ -134,9 +136,9 @@ const add = (event: Event) => {
     event.stopPropagation();
 }
 
-const more = (event: Event, index: number) => {
+const more = (event: Event, id: number) => {
     event.stopPropagation();
-    actionIndex.value = index;
+    actionId.value = id;
 }
 
 const moreAction = (item) => {
@@ -156,7 +158,7 @@ const moreAction = (item) => {
         ipcRenderer.send('watch-file', playList[actionIndex.value].url);
     }else if(item.value === 'play') {
         stopMusic();
-        selectItem(actionIndex.value);
+        selectItem(actionId.value);
         const { playSrc } = usePlayList();
         createAudio([playSrc]);
         playMusic();
@@ -179,7 +181,7 @@ const toVideo = (e: Event, id: string) => {
             id,
         }
     })
-}
+};
 </script>
 <style scoped>
 .singer {
