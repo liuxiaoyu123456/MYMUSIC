@@ -143,6 +143,11 @@ const onMin = () => {
     padding: 16px 24px 10px;
     height: calc(100% - 68px);
     overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+.content > * {
+  flex-shrink: 0;
 }
 button {
     -webkit-app-region: no-drag;

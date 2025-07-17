@@ -217,7 +217,7 @@ const toVideo = (e: Event, id: string) => {
 }
 .column {
     text-overflow: ellipsis;
-    width: 300px;
+    width: 250px;
     overflow: hidden;
 }
 </style>

@@ -122,11 +122,11 @@ export const formatteDate = (num: number) => {
   return date;
 };
 
-export const fuzzySearch = (arr: any, keyword: string, fields = []) => {
+export const fuzzySearch = (arr: any, keyword: string, fields: string[] = []) => {
   if (!keyword) return arr;
   const kw = String(keyword).toLowerCase();
 
-  return arr.filter(item =>
+  return arr.filter((item: any) =>
     (fields.length ? fields : Object.keys(item)).some(key => {
       const val = item[key];
       return val != null && String(val).toLowerCase().includes(kw);

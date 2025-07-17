@@ -3,18 +3,22 @@
     <Tabs v-if="!batchMode" :items="tabs"/>
     <ButtonList @batch-change="changeBatch" @search="searchSongs"/>
     <MusicTable
+      v-if="localSongs.length !== 0"
       :items="localSongs"
       :columns="columns"
       :select="batchMode"
     />
+    <Empty v-else :emptyImg="Emptyimg"/>
 </template>
 <script setup lang="ts">
 import Tabs from '@/components/Tabs.vue';
 import MusicTable from '@/components/MusicTable.vue';
 import ButtonList from '@/components/ButtonList.vue';
+import Empty from '@/components/Empty.vue';
 import { usePlayList } from '@/store/play';
 import { fuzzySearch } from '@/utils';
 import { ref } from 'vue';
+import Emptyimg from '@/assets/empty.svg';
 import { storeToRefs } from 'pinia';
 
 const store = usePlayList();
@@ -40,10 +44,16 @@ const changeBatch = (val: boolean) => {
 };
 
 const searchSongs = (val: string) => {
-    localSongs.value = fuzzySearch(initLists, val);
+    localSongs.value = fuzzySearch(initLists, val, ['sing', 'column']);
 };
 </script>
 <style scoped>
+.local {
+    /* display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto; */
+}
 .title {
     font-size: 25px;
     font-weight: bolder;

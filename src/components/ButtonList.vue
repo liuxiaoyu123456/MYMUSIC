@@ -121,6 +121,7 @@ watch(
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
 }
 .btn:not(:first-child) {
     margin-left: 10px;

@@ -136,7 +136,7 @@ let total: number | string = '';
 
 const volumeProgress = ref(volume.value*100);
 
-const playModeIcon = ref('repeat');
+const playModeIcon = ref(playMode.value);
 
 const modal = ref(false);
 
