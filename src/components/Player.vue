@@ -32,7 +32,7 @@
                 <MenuList placement="top" :items="playModeOptions" @change-select="selectPlayMode">
                     <VaButton preset="secondary" size="large">
                         <template #append>
-                            <font-awesome-icon v-if="playModeIcon.split('-')[0] === 'fa'" :icon="playModeIcon" />
+                            <font-awesome-icon v-if="playMode === 'random'" icon="fa-solid fa-shuffle" />
                             <VaIcon v-else :name="playModeIcon" size="large"/>
                         </template>
                     </VaButton>

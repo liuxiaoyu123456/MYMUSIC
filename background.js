@@ -28,7 +28,13 @@ const createWindow = () => {
             contextIsolation: false,
             webSecurity: false,
         }
-    })
+    });
+
+    win.on('close', (event) => {
+        event.preventDefault();
+        win.webContents.send('reset-local');
+        win.destroy();
+    });
 
     // development模式
     if(process.env.VITE_DEV_SERVER_URL) {
@@ -51,7 +57,7 @@ const createWindow = () => {
         win.minimize();
     })
 
-    ipcMain.on('window-close', function() {
+    ipcMain.on('window-close', function(event) {
         win.close();
     })
 

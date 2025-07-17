@@ -47,7 +47,7 @@
                 <VaButton @click="add" icon="add_circle_outline" preset="secondary"/>
             </MenuList>
             <MenuList placement = "right" :items="moreOptions" @change-select="moreAction">
-                <VaButton @click="more($event, value.rowData.id)" icon="more_horiz" preset="secondary"/>
+                <VaButton @click="more($event, value.rowData.id, value.rowIndex)" icon="more_horiz" preset="secondary"/>
             </MenuList>
         </template>
     </VaDataTable>
@@ -63,6 +63,16 @@ import MusicPic from "@/components/MusicPic.vue";
 import { useRoute } from 'vue-router';
 import { getNetWorkUrls } from '@/utils';
 import router from '@/router';
+
+const props = defineProps<{ 
+    items: any[],
+    columns: any[],
+    select: boolean,
+}>();
+
+const emit = defineEmits<{
+    ( e: 'deleteItem', value: number[]): void,
+}>();
 
 const route = useRoute();
 
@@ -80,15 +90,9 @@ const { selectItems, isLocal, songId, songmid }  = storeToRefs(store);
 
 const actionId = ref(0);
 
+const actionIndex = ref(0);
+
 const first = ref(true);
-
-// const disabled = ref(true);
-
-const props = defineProps<{ 
-    items: any[],
-    columns: any[],
-    select: boolean,
-}>();
 
 const addOptions = [
     { text: '我喜欢', value: 'like', icon: 'favorite_border' },
@@ -134,12 +138,13 @@ const selectPlay = async(event: RowClickEvent) => {
 
 const add = (event: Event) => {
     event.stopPropagation();
-}
+};
 
-const more = (event: Event, id: number) => {
+const more = (event: Event, id: number, index: number) => {
     event.stopPropagation();
     actionId.value = id;
-}
+    actionIndex.value = index;
+};
 
 const moreAction = (item) => {
     if(item.value === 'delete') {
@@ -150,12 +155,13 @@ const moreAction = (item) => {
             size: 'small',
             title: '删除',
             onOk: () => {
-                deleteItem(actionIndex.value);
+                deleteItem(actionId.value);
+                emit('deleteItem', [actionId.value]);
             }
         })
     }else if(item.value === 'watch') {
-        const { playList } = store;
-        ipcRenderer.send('watch-file', playList[actionIndex.value].url);
+        const { localSongs } = store;
+        ipcRenderer.send('watch-file', localSongs[actionIndex.value].url);
     }else if(item.value === 'play') {
         stopMusic();
         selectItem(actionId.value);

@@ -98,15 +98,15 @@ let ipcRenderer = require('electron').ipcRenderer;
 const onResize = () => {
     ipcRenderer.send('window-max');
     max.value = !max.value;
-}
+};
 
 const onClose = () => {
     ipcRenderer.send('window-close');
-}
+};
 
 const onMin = () => {
     ipcRenderer.send('window-min');
-}
+};
 </script>
 <style scoped>
 .action {

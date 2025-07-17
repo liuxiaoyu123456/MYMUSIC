@@ -54,8 +54,16 @@ export const usePlayList = defineStore('play', {
         },
 
         deleteItem(num: number) {
-            this.playList.splice(num, 1);
-            this.localSongs.splice(num, 1);
+            this.playList.forEach((item, index) => {
+                if(item.id === num) {
+                    this.playList.splice(index, 1);
+                }
+            })
+            this.localSongs.forEach((item, index) => {
+                if(item.id === num) {
+                    this.localSongs.splice(index, 1);
+                }
+            })
         },
 
         nextSing() {
@@ -87,13 +95,9 @@ export const usePlayList = defineStore('play', {
 
         batchDelete(deleteItems?: any[]) {
             const lists = deleteItems? deleteItems:this.selectItems.map(item=>item.id); // 需要删除的id列表
-            for(let i=0; i<this.playList.length;i++) {
-                if(lists.includes(this.playList[i].id)) {
-                    this.playList.splice(i, 1);
-                    this.localSongs.splice(i, 1);
-                    i = i - 1;
-                }
-            }
+            lists.forEach((item: number) => {
+                this.deleteItem(item);
+            })
         },
 
         setSelectItems(arr: any[]) {

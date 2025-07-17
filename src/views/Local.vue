@@ -1,12 +1,17 @@
 <template>
     <div v-if="!batchMode" class="title">本地和下载</div>
     <Tabs v-if="!batchMode" :items="tabs"/>
-    <ButtonList @batch-change="changeBatch" @search="searchSongs"/>
+    <ButtonList
+      @batch-change="changeBatch"
+      @search="searchSongs"
+      @batch-delete="deleteMusic"
+    />
     <MusicTable
       v-if="localSongs.length !== 0"
       :items="localSongs"
       :columns="columns"
       :select="batchMode"
+      @delete-item="deleteMusic"
     />
     <Empty v-else :emptyImg="Emptyimg"/>
 </template>
@@ -17,9 +22,11 @@ import ButtonList from '@/components/ButtonList.vue';
 import Empty from '@/components/Empty.vue';
 import { usePlayList } from '@/store/play';
 import { fuzzySearch } from '@/utils';
-import { ref } from 'vue';
+import { onBeforeUnmount, ref } from 'vue';
 import Emptyimg from '@/assets/empty.svg';
 import { storeToRefs } from 'pinia';
+
+const ipcRenderer = require('electron').ipcRenderer;
 
 const store = usePlayList();
 
@@ -35,7 +42,7 @@ const columns = [
     { key: 'length', label: '时长' },
     { key: 'size', label: '大小' },
     { key: 'action', label: '操作' }
-]
+];
 
 const batchMode = ref(false);
 
@@ -44,16 +51,30 @@ const changeBatch = (val: boolean) => {
 };
 
 const searchSongs = (val: string) => {
-    localSongs.value = fuzzySearch(initLists, val, ['sing', 'column']);
+    localSongs.value = fuzzySearch(initLists, val, ['sing', 'column', 'artist']);
 };
+
+const deleteMusic = (val: number[]) => {
+    initLists.forEach((item, index) => {
+        val.forEach((i) => {
+            if(item.id === i) {
+                initLists.splice(index, 1);
+            }
+        })
+    })
+};
+
+// 组件销毁时恢复数据
+onBeforeUnmount(()=>{
+    localSongs.value = initLists;
+});
+
+// 窗口关闭时恢复数据
+ipcRenderer.on('reset-local',()=>{
+    localSongs.value = initLists;
+})
 </script>
 <style scoped>
-.local {
-    /* display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow-y: auto; */
-}
 .title {
     font-size: 25px;
     font-weight: bolder;

@@ -25,6 +25,11 @@ const createWindow = () => {
       webSecurity: false
     }
   });
+  win.on("close", (event) => {
+    event.preventDefault();
+    win.webContents.send("reset-local");
+    win.destroy();
+  });
   if (process.env.VITE_DEV_SERVER_URL) {
     win.loadURL(process.env.VITE_DEV_SERVER_URL);
     win.webContents.openDevTools();
@@ -41,7 +46,7 @@ const createWindow = () => {
   ipcMain.on("window-min", function() {
     win.minimize();
   });
-  ipcMain.on("window-close", function() {
+  ipcMain.on("window-close", function(event) {
     win.close();
   });
   ipcMain.on("open-file-dialog", async (event) => {

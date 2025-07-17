@@ -49,6 +49,7 @@ const keyWord = ref('');
 const emit = defineEmits<{
     (e: 'batch-change', value: boolean): void,
     (e: 'search', value: string): void,
+    (e: 'batch-delete', value: number[]): void,
 }>();
 
 const batchAction = ref(false);
@@ -58,6 +59,9 @@ const addFile = () => {
 };
 
 const Delete = ()=>{
+    const { selectItems } = usePlayList();
+    const ids = selectItems.map(item=>item.id);
+    emit('batch-delete', ids);
     batchDelete();
 };
 
