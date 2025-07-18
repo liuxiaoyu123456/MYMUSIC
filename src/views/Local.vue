@@ -11,7 +11,7 @@
       :columns="columns"
       :select="batchMode"
     />
-    <Empty v-else :emptyImg="Emptyimg"/>
+    <Empty v-else :emptyImg="EmptyMusic" :tip="tipEmpty"/>
 </template>
 <script setup lang="ts">
 import Tabs from '@/components/Tabs.vue';
@@ -20,8 +20,9 @@ import ButtonList from '@/components/ButtonList.vue';
 import Empty from '@/components/Empty.vue';
 import { usePlayList } from '@/store/play';
 import { fuzzySearch } from '@/utils';
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import Emptyimg from '@/assets/empty.svg';
+import { onBeforeUnmount, ref } from 'vue';
+import EmptyMusic from '@/assets/empty.svg';
+import EmptyVideo from '@/assets/empty-video.svg';
 import { storeToRefs } from 'pinia';
 
 const ipcRenderer = require('electron').ipcRenderer;
@@ -34,7 +35,7 @@ const { localSongs, initSongs } = storeToRefs(store);
 
 setInitSongs(localSongs.value);
 
-const tabs = ['本地歌曲','下载歌曲','正在下载'];
+const tabs = ['本地歌曲','下载歌曲','下载视频','正在下载'];
 
 const columns = [
     { key: 'sing', label: '歌手/歌名', sortable: true },
@@ -45,6 +46,8 @@ const columns = [
 ];
 
 const batchMode = ref(false);
+
+const tipEmpty = ref('暂时没有音乐');
 
 const changeBatch = (val: boolean) => {
     batchMode.value = val;

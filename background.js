@@ -17,7 +17,7 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 const createWindow = () => {
     const win = new BrowserWindow({
         // 窗口图标
-        icon: join(__dirname, 'assets/icon.jpg'),
+        icon: join(__dirname, '/src/assets/icon.png'),
         width: 1000,
         height: 625,
         minWidth: 1000,

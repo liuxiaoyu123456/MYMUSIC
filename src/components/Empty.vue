@@ -2,13 +2,14 @@
     <div class="empty">
         <div class="box">
             <img class="empty-img" :src=props.emptyImg>
-            <div class="tip">暂时没有音乐</div>
+            <div class="tip">{{ props.tip }}</div>
         </div>
     </div>
 </template>
 <script setup lang="ts">
 const props = defineProps<{
     emptyImg: string,
+    tip: string,
 }>();
 </script>
 <style scoped>
