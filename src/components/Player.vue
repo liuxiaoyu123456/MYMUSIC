@@ -294,11 +294,13 @@ watch(
     width: 300px;
     align-items: center;
     height: 64px;
+    flex: 0 0 auto;
 }
 .list {
     width: 300px;
     display: flex;
     justify-content: end;
+    flex: 0 0 auto;
 }
 .slider {
     width: 60px;

@@ -15,17 +15,31 @@
                              :rules="[(value) => (value && value.length > 0) || 'QQ必须填写！']"
                             /> 
                         </div>
+                        <!-- <div class="item">
+                            <span class="label">密码</span>
+                            <VaInput
+                              v-model="loginForm.password"
+                              placeholder="请输入密码"
+                              type="password"
+                              :rules="[(value) => (value && value.length > 0) || '密码必须填写！']"
+                            /> 
+                        </div> -->
                         <div class="remember">
                             <VaCheckbox
                                 v-model="loginForm.remember"
                                 label="记住我"
                             />
+                            <!-- <VaButton preset="plain">忘记密码？</VaButton> -->
                         </div>
                     </VaForm>
                     <VaButton
                       class="submit"
                       @click="login"
                     >登录</VaButton>
+                    <!-- <div class="tip">
+                        还没有注册？
+                        <VaButton preset="plain">去注册</VaButton>
+                    </div> -->
                 </VaCardContent>
             </VaCard>
         </div>

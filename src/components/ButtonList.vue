@@ -62,17 +62,20 @@ const addFile = () => {
 };
 
 const Delete = ()=>{
-    init({
-        message: '确定要删除文件吗',
-        okText: '确定',
-        cancelText: '取消',
-        size: 'small',
-        title: '删除',
-        onOk: () => {
-            const { selectItems } = usePlayList();
-            batchDelete();
-        }
-    });
+    const { selectItems } = usePlayList();
+    if(selectItems.length) {
+        init({
+            message: '确定要删除文件吗',
+            okText: '确定',
+            cancelText: '取消',
+            size: 'small',
+            title: '删除',
+            onOk: () => {
+                batchDelete();
+            }
+        });
+    }
+    
     
 };
 

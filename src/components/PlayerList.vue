@@ -172,16 +172,19 @@ const selectAllItems = (val: boolean) => {
 };
 
 const Delete = () => {
-    init({
-        message: '确定要删除文件吗',
-        okText: '确定',
-        cancelText: '取消',
-        size: 'small',
-        title: '删除',
-        onOk: () => {
-            batchDelete(selection.value);
-        }
-    })
+    if(selection.value.length) {
+        init({
+            message: '确定要删除文件吗',
+            okText: '确定',
+            cancelText: '取消',
+            size: 'small',
+            title: '删除',
+            onOk: () => {
+                batchDelete(selection.value);
+            }
+        })
+    }
+    
 };
 
 watch(

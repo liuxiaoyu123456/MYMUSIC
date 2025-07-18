@@ -51,15 +51,17 @@
             </MenuList>
         </template>
     </VaDataTable>
+    <AddOptions v-model="addSelect"/>
 </template>
 <script setup lang="ts">
 import MenuList from '@/components/MenuList.vue';
+import MusicPic from "@/components/MusicPic.vue";
+import AddOptions from '@/components/AddOptions.vue';
 import { usePlayList } from '@/store/play';
 import { useAudio } from '@/store/audio';
-import { useModal, type DataTableRow, } from 'vuestic-ui';
+import { useModal, type DataTableRow } from 'vuestic-ui';
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
-import MusicPic from "@/components/MusicPic.vue";
 import { useRoute } from 'vue-router';
 import { getNetWorkUrls } from '@/utils';
 import router from '@/router';
@@ -93,6 +95,8 @@ const actionId = ref(0);
 const actionIndex = ref(0);
 
 const first = ref(true);
+
+const addSelect = ref(false);
 
 const addOptions = [
     { text: '我喜欢', value: 'like', icon: 'favorite_border' },
@@ -147,29 +151,35 @@ const more = (event: Event, id: number, index: number) => {
 };
 
 const moreAction = (item) => {
-    if(item.value === 'delete') {
-        init({
-            message: '确定要删除文件吗',
-            okText: '确定',
-            cancelText: '取消',
-            size: 'small',
-            title: '删除',
-            onOk: () => {
-                deleteItem(actionId.value);
-                emit('deleteItem', [actionId.value]);
-            }
-        })
-    }else if(item.value === 'watch') {
-        const { localSongs } = store;
-        ipcRenderer.send('watch-file', localSongs[actionIndex.value].url);
-    }else if(item.value === 'play') {
-        stopMusic();
-        selectItem(actionId.value);
-        const { playSrc } = usePlayList();
-        createAudio([playSrc]);
-        playMusic();
+    switch(item.value) {
+        case 'delete':
+            init({
+                message: '确定要删除文件吗',
+                okText: '确定',
+                cancelText: '取消',
+                size: 'small',
+                title: '删除',
+                onOk: () => {
+                    deleteItem(actionId.value);
+                    emit('deleteItem', [actionId.value]);
+                }
+            })
+            break;
+        case 'watch':
+            const { localSongs } = store;
+            ipcRenderer.send('watch-file', localSongs[actionIndex.value].url);
+            break;
+        case 'play':
+            stopMusic();
+            selectItem(actionId.value);
+            const { playSrc } = usePlayList();
+            createAudio([playSrc]);
+            playMusic();
+            break;
+        case 'add':
+            addSelect.value = true;
     }
-}
+};
 
 const getRowStatus = (row: DataTableRow) => {
     if(row.isPlaying) {
