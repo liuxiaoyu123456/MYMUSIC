@@ -57,7 +57,7 @@ import MenuList from '@/components/MenuList.vue';
 import { usePlayList } from '@/store/play';
 import { useAudio } from '@/store/audio';
 import { useModal, type DataTableRow, } from 'vuestic-ui';
-import { watch, ref } from 'vue';
+import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import MusicPic from "@/components/MusicPic.vue";
 import { useRoute } from 'vue-router';

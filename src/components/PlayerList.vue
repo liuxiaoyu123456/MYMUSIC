@@ -1,6 +1,6 @@
 <template>
     <div class="player-list">
-        <VaSidebar :model-value="modelValue" animated="right" width="450px" style="overflow: hidden;">
+        <VaSidebar :model-value="props.modelValue" animated="right" width="450px" style="overflow: hidden;">
             <div class="header">
                 <span>播放列表</span>
                 <div>
@@ -48,7 +48,7 @@
                             <div class="btn-list">
                                 <VaButton icon="favorite_outline" preset="secondary" :disabled="isLocal"/>
                                  <MenuList placement = "right" :items="moreOptions" @change-select="moreAction">
-                                    <VaButton @click="more($event, index)" icon="more_horiz" preset="secondary"/>
+                                    <VaButton @click="more($event, index, item.id)" icon="more_horiz" preset="secondary"/>
                                 </MenuList>
                             </div>
                         </div>
@@ -66,12 +66,9 @@ import { usePlayList } from '@/store/play';
 import { storeToRefs } from 'pinia';
 import { useModal } from 'vuestic-ui';
 import { useAudio } from '@/store/audio';
-import { useRoute } from 'vue-router';
 import { getNetWorkUrls } from '@/utils';
 
 const ipcRenderer = require('electron').ipcRenderer;
-
-const route = useRoute();
 
 const { init } = useModal();
 
@@ -91,6 +88,8 @@ const props = defineProps<{
 
 const actionIndex = ref(0);
 
+const actionId = ref(0);
+
 const selection = ref([]);
 
 const batch = ref(false);
@@ -104,9 +103,10 @@ const moreOptions = [
     { text: '查看评论', value: 'comment', icon: 'comment' },
 ];
 
-const more = (event: Event, index: number) => {
+const more = (event: Event, index: number, id: number) => {
     event.stopPropagation();
     actionIndex.value = index;
+    actionId.value = id;
 };
 
 const moreAction = (item) => {
@@ -118,7 +118,7 @@ const moreAction = (item) => {
             size: 'small',
             title: '删除',
             onOk: () => {
-                deleteItem(actionIndex.value);
+                deleteItem(actionId.value);
             }
         })
     }else if(item.value === 'watch') {
@@ -137,7 +137,7 @@ const selectPlay = async(item, index: number) => {
     if(!item.isPlaying) {
         stopMusic();
         if(isLocal.value) {
-            selectItem(index);
+            selectItem(item.id);
             const { playSrc } = usePlayList();
             createAudio([playSrc]);
             playMusic();
@@ -172,7 +172,16 @@ const selectAllItems = (val: boolean) => {
 };
 
 const Delete = () => {
-    batchDelete(selection.value);
+    init({
+        message: '确定要删除文件吗',
+        okText: '确定',
+        cancelText: '取消',
+        size: 'small',
+        title: '删除',
+        onOk: () => {
+            batchDelete(selection.value);
+        }
+    })
 };
 
 watch(

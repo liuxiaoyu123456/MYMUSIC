@@ -36,20 +36,23 @@ import { useAudio } from '@/store/audio';
 import { usePlayList } from '@/store/play';
 import { type IAudioMetadata } from 'music-metadata';
 import { getTime, formatFileSizeInMB, getImage } from '@/utils';
+import { useModal } from 'vuestic-ui';
 
 const ipcRenderer = require('electron').ipcRenderer;
 
 const { playMusic, stopMusic, createAudio } = useAudio();
+
 const { selectItem, batchDelete, setSelectItems } = usePlayList();
 
 const { addPlayItem } = usePlayList();
+
+const { init } = useModal();
 
 const keyWord = ref('');
 
 const emit = defineEmits<{
     (e: 'batch-change', value: boolean): void,
     (e: 'search', value: string): void,
-    (e: 'batch-delete', value: number[]): void,
 }>();
 
 const batchAction = ref(false);
@@ -59,10 +62,18 @@ const addFile = () => {
 };
 
 const Delete = ()=>{
-    const { selectItems } = usePlayList();
-    const ids = selectItems.map(item=>item.id);
-    emit('batch-delete', ids);
-    batchDelete();
+    init({
+        message: '确定要删除文件吗',
+        okText: '确定',
+        cancelText: '取消',
+        size: 'small',
+        title: '删除',
+        onOk: () => {
+            const { selectItems } = usePlayList();
+            batchDelete();
+        }
+    });
+    
 };
 
 const exit = () => {

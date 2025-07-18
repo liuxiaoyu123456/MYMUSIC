@@ -9,6 +9,7 @@ export const usePlayList = defineStore('play', {
         playList: [],
         likeLists: [],
         localSongs: [],
+        initSongs: [],
         playSrc: '',
         singName: '',
         singArtist: '',
@@ -23,7 +24,7 @@ export const usePlayList = defineStore('play', {
 
     actions: {
         addPlayItem(item) {
-            const lists = this.localSongs.map(item=>item.url);
+            const lists = this.playList.map(item=>item.url);
             if(lists.includes(item.url)){
                 init({
                     message: "重复添加！",
@@ -62,6 +63,11 @@ export const usePlayList = defineStore('play', {
             this.localSongs.forEach((item, index) => {
                 if(item.id === num) {
                     this.localSongs.splice(index, 1);
+                }
+            })
+            this.initSongs.forEach((item, index) => {
+                if(item.id === num) {
+                    this.initSongs.splice(index, 1);
                 }
             })
         },
@@ -136,7 +142,17 @@ export const usePlayList = defineStore('play', {
                 this.likeLists.push(like);
             })
         },
+
+        setInitSongs (arr: any) {
+            this.initSongs = arr;
+        }
     },
 
-    persist: true, // 持久化存储
+    persist: {
+        key: 'play',
+        storage: localStorage,
+        pick: [
+            'playList', 'likeLists', 'localSongs', 'playSrc', 'singName', 'singArtist', 'playCover', 'order', 'playMode', 'isLocal', 'songId', 'songmid'
+        ]
+    } // 持久化存储
 })
