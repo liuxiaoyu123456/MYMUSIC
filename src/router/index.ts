@@ -78,15 +78,10 @@ router.beforeEach(async(to, from, next) => {
         next();
     } else {
         // 判断是否登录
-        const { data } = await userRefresh();
-        if(data.result === 301) {
+        const { isLogin } = useUserInfo();
+        if(!isLogin) {
             next('login');
         }else {
-            const { userInfo, setUserInfo } = useUserInfo();
-            if(JSON.stringify(userInfo)=='{}'){
-                const { data } = await getUserDetail();
-                setUserInfo(data.data);
-            }
             next();
         }
     }

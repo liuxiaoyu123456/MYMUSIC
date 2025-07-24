@@ -61,7 +61,7 @@ const { validate } = useForm('Login');
 const login = () => {
     if(validate()) {
         setCookie();
-        // console.log(getCookie(loginForm.value.username));
+        getCookie(loginForm.value.username);
         router.push('/local');
     }
 };

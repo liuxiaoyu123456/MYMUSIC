@@ -99,6 +99,7 @@
     />
     <FullScreen
       v-model="fullModal"
+      :coverPic="playCover"
     />
 </template>
 <script lang="ts" setup>

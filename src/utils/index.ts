@@ -7,6 +7,7 @@ import { useToast } from "vuestic-ui";
 import { storeToRefs } from "pinia";
 import { getComment } from "@/api/comment";
 import moment from 'moment';
+import ColorThief from 'colorthief';
 
 export const getTime = (data: number) => {
     const seconds = parseInt(data as unknown as string);
@@ -84,7 +85,7 @@ export const getNetWorkUrls = async(i: number) => {
   const { playList, playMode } = storeToRefs(store);
   let urls: string[] = [];
   while(urls.length === 0) {
-    selectItem(i);
+    selectItem(playList.value[i].id);
     const { data } = await getPlayUrl(playList.value[i].id);
     urls = transformUrls(data.data);
     if(urls.length === 0) {
@@ -136,4 +137,18 @@ export const fuzzySearch = (arr: any, keyword: string, fields: string[] = []) =>
 
 export const getMvSingers = (arr: any): string => {
   return arr.map((item: any) => item.name).join(',');
+};
+
+export const getColors = (imgSrc: string) => {
+  const colorThief = new ColorThief();
+  let color = '#121212'
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.src = imgSrc;
+  img.onload = () => {
+    const [r, g, b] = colorThief.getColor(img);
+    color = `rgb(${r},${g},${b})`;
+    console.log(color);
+  };
+  return color;
 };

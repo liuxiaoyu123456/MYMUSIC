@@ -18,7 +18,7 @@ onMounted(()=>{
     instance.value = new Artplayer({
         container: artRef.value,
         url: props.url,
-        theme: '#2c82e0',
+        theme: 'var(--va-primary)',
         fullscreen: true,
         poster: props.poster,
     })

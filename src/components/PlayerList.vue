@@ -110,26 +110,29 @@ const more = (event: Event, index: number, id: number) => {
 };
 
 const moreAction = (item) => {
-    if(item.value === 'delete') {
-        init({
-            message: '确定要删除文件吗',
-            okText: '确定',
-            cancelText: '取消',
-            size: 'small',
-            title: '删除',
-            onOk: () => {
-                deleteItem(actionId.value);
-            }
-        })
-    }else if(item.value === 'watch') {
-        const { playList } = store;
-        ipcRenderer.send('watch-file', playList[actionIndex.value].url);
-    }else if(item.value === 'play') {
-        stopMusic();
-        selectItem(actionIndex.value);
-        const { playSrc } = usePlayList();
-        createAudio([playSrc]);
-        playMusic();
+    switch(item.value) {
+        case 'delete':
+            init({
+                message: '确定要删除文件吗',
+                okText: '确定',
+                cancelText: '取消',
+                size: 'small',
+                title: '删除',
+                onOk: () => {
+                    deleteItem(actionId.value);
+                }
+            })
+            break;
+        case 'watch':
+            const { playList } = store;
+            ipcRenderer.send('watch-file', playList[actionIndex.value].url);
+            break;
+        case 'play':
+            stopMusic();
+            selectItem(actionId.value);
+            const { playSrc } = usePlayList();
+            createAudio([playSrc]);
+            playMusic();
     }
 };
 

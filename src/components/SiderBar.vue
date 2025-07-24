@@ -57,9 +57,9 @@ import SideBar from '@/types/sidebar.ts';
 const page = ref('home');
 
 const online = [
-    {
-        icon: 'home', title: '推荐', route: '/recommend'
-    },
+    // {
+    //     icon: 'home', title: '推荐', route: '/recommend'
+    // },
     {
         icon: 'music_video', title: '乐馆', route: '/musicShop'
     },
@@ -86,7 +86,7 @@ const my = [
 const clickMenu = (item: SideBar) => {
     router.push(item.route);
     page.value = item.title;
-}
+};
 </script>
 <style scoped>
 .sider {

@@ -33,6 +33,10 @@ export const usePlayList = defineStore('play', {
             }else {
                 this.localSongs.push(item);
                 this.playList.push(item);
+                init({
+                    message: '成功添加',
+                    color: 'success'
+                })
             }
         },
 

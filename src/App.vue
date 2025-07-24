@@ -4,6 +4,22 @@
   </div>
 </template>
 <script setup lang="ts">
+import { onMounted } from 'vue';
+import { userRefresh, getUserDetail } from '@/api/user';
+import { useUserInfo } from '@/store/user';
+
+const { setLogin, userInfo, setUserInfo } = useUserInfo();
+
+onMounted(async()=>{
+  const { data } = await userRefresh();
+  if(data.result === 200) {
+    setLogin();
+    if(JSON.stringify(userInfo)=='{}'){
+        const { data } = await getUserDetail();
+        setUserInfo(data.data);
+    }
+  }
+})
 </script>
 <style scoped>
 #app {
