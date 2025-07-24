@@ -7,7 +7,6 @@ import { useToast } from "vuestic-ui";
 import { storeToRefs } from "pinia";
 import { getComment } from "@/api/comment";
 import moment from 'moment';
-import ColorThief from 'colorthief';
 
 export const getTime = (data: number) => {
     const seconds = parseInt(data as unknown as string);
@@ -139,16 +138,38 @@ export const getMvSingers = (arr: any): string => {
   return arr.map((item: any) => item.name).join(',');
 };
 
-export const getColors = (imgSrc: string) => {
-  const colorThief = new ColorThief();
-  let color = '#121212'
+export const getColors = async(imgUrl: string) => {
   const img = new Image();
   img.crossOrigin = 'anonymous';
-  img.src = imgSrc;
-  img.onload = () => {
-    const [r, g, b] = colorThief.getColor(img);
-    color = `rgb(${r},${g},${b})`;
-    console.log(color);
-  };
-  return color;
+  img.src = imgUrl;
+  await img.decode();
+
+  const canvas = document.createElement('canvas');
+  const ctx    = canvas.getContext('2d');
+
+  // 为性能，把大图缩到 ≤ 200*200
+  const maxSide = 200;
+  const ratio = Math.min(maxSide / img.width, maxSide / img.height);
+  canvas.width  = img.width  * ratio;
+  canvas.height = img.height * ratio;
+
+  ctx!.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+  // 读取像素
+  const imageData = ctx!.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;   // Uint8ClampedArray
+
+  let r = 0, g = 0, b = 0, len = data.length / 4;
+  for (let i = 0; i < data.length; i += 4) {
+    r += data[i];
+    g += data[i + 1];
+    b += data[i + 2];
+  }
+
+  r = Math.round(r / len);
+  g = Math.round(g / len);
+  b = Math.round(b / len);
+
+  // 返回 {rgb, hex}
+  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 };

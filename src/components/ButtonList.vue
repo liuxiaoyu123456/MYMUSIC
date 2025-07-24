@@ -1,7 +1,7 @@
 <template>
     <div class="button-list">
         <div class="left">
-            <VaButton class="btn" round icon="play_arrow" preset="primary" @click="play">播放</VaButton>
+            <VaButton class="btn" round :icon="playIcon" preset="primary" @click="play">播放</VaButton>
             <VaButton class="btn" round icon="add_circle_outline" preset="primary" @click="addFile">添加</VaButton>
             <VaButton class="btn" round icon="checklist" preset="primary" @click="batchAction = true;">批量</VaButton>
             <VaButton v-if="batchAction" class="btn" round icon="delete_outline" preset="primary" @click="Delete">删除</VaButton>
@@ -37,10 +37,15 @@ import { usePlayList } from '@/store/play';
 import { type IAudioMetadata } from 'music-metadata';
 import { getTime, formatFileSizeInMB, getImage } from '@/utils';
 import { useModal } from 'vuestic-ui';
+import { storeToRefs } from 'pinia';
 
 const ipcRenderer = require('electron').ipcRenderer;
 
-const { playMusic, stopMusic, createAudio } = useAudio();
+const store = useAudio();
+
+const { playMusic, stopMusic, createAudio } = store;
+
+const { paused } = storeToRefs(store);
 
 const { selectItem, batchDelete, setSelectItems } = usePlayList();
 
@@ -49,6 +54,8 @@ const { addPlayItem } = usePlayList();
 const { init } = useModal();
 
 const keyWord = ref('');
+
+const playIcon = ref('play_arrow');
 
 const emit = defineEmits<{
     (e: 'batch-change', value: boolean): void,
@@ -107,10 +114,14 @@ ipcRenderer.on('selected-file', (event: Event, selectedFilePath: string, file: I
 
 const play = () => {
     stopMusic();
-    selectItem(0);
-    const { playSrc } = usePlayList();
-    createAudio([playSrc]);
-    playMusic();
+    const { localSongs } = usePlayList();
+    if(localSongs.length) {
+        selectItem(localSongs[0].id);
+        const { playSrc } = usePlayList();
+        createAudio([playSrc]);
+        playMusic();
+        playIcon.value = 'pause';
+    }
 };
 
 const searchMusic = (e: KeyboardEvent) => {
@@ -129,6 +140,14 @@ watch(
     () => keyWord.value, (val) => {
         if(!val) {
             emit('search', val)
+        }
+    }
+)
+
+watch(
+    () =>paused.value, (val) => {
+        if(val && playIcon.value === 'pause') {
+            playIcon.value = 'play_arrow';
         }
     }
 )
