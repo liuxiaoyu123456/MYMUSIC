@@ -1,132 +1,134 @@
 <template>
     <div class="title">乐馆</div>
     <Tabs v-model="tab" :items="tabs" />
-    <div v-if="tab === 0">
-        <!-- 精选 -->
-        <VaCarousel
-          v-if="carouselItems.length"
-          v-model="carouselValue"
-          :items="carouselItems"
-          :indicators="true"
-          fit="fill"
-          autoscroll
-          class="carousel"
-        />
-        <Title :title="'官方歌单'" />
-        <div class="album">
-            <MusicCard
-                class="album-item"
-                v-for="item in recommendAblumItems"
-                :pic-src="item.cover"
-                :title="item.title"
+    <VaInnerLoading class="loading" loading v-if="loading" />
+    <div v-else-if="carouselItems.length">
+        <div v-if="tab === 0">
+            <!-- 精选 -->
+            <VaCarousel
+              v-model="carouselValue"
+              :items="carouselItems"
+              :indicators="true"
+              fit="fill"
+              autoscroll
+              class="carousel"
             />
+            <Title :title="'官方歌单'" />
+            <div class="album">
+                <MusicCard
+                    class="album-item"
+                    v-for="item in recommendAblumItems"
+                    :pic-src="item.cover"
+                    :title="item.title"
+                />
+            </div>
+            <Title :title="'最新发行'" />
+            <div class="album">
+                <MusicCard
+                    class="album-item"
+                    v-for="item in newSongsItems"
+                    :pic-src="item.cover"
+                    :title="item.title"
+                />
+            </div>
         </div>
-        <Title :title="'最新发行'" />
-        <div class="album">
-            <MusicCard
-                class="album-item"
-                v-for="item in newSongsItems"
-                :pic-src="item.cover"
-                :title="item.title"
-            />
+        <div v-if="tab === 1" class="top">
+            <!-- 巅峰榜 -->
+            <div class="peak">
+                <TopMusicCard
+                    v-for="item in topLists"
+                    :songs="item.song.map(item=>(item.title))"
+                    :title="item.label"
+                    :cover="item.picUrl"
+                />
+            </div>
+            <!-- 地区榜 -->
+            <div class="sub-title">地区榜</div>
+            <div class="area">
+                <PlayMusicCard
+                    class="play-music"
+                    v-for="item in areaSongsItems"
+                    :listen-num="item.listenNum"
+                    :pic-url="item.picUrl"
+                />
+            </div>
+            <div class="sub-title">特色榜</div>
+            <div class="area">
+                <PlayMusicCard
+                    class="play-music"
+                    v-for="item in specialSongsItems"
+                    :listen-num="item.listenNum"
+                    :pic-url="item.picUrl"
+                />
+            </div>
+            <div class="sub-title">全球榜</div>
+            <div class="area">
+                <PlayMusicCard
+                    class="play-music"
+                    v-for="item in globalSongsItems"
+                    :listen-num="item.listenNum"
+                    :pic-url="item.picUrl"
+                />
+            </div>
         </div>
-    </div>
-    <div v-if="tab === 1" class="top">
-        <!-- 巅峰榜 -->
-        <div class="peak">
-            <TopMusicCard
-                v-for="item in topLists"
-                :songs="item.song.map(item=>(item.title))"
-                :title="item.label"
-                :cover="item.picUrl"
-            />
-        </div>
-        <!-- 地区榜 -->
-        <div class="sub-title">地区榜</div>
-        <div class="area">
-            <PlayMusicCard
-                class="play-music"
-                v-for="item in areaSongsItems"
-                :listen-num="item.listenNum"
-                :pic-url="item.picUrl"
-            />
-        </div>
-        <div class="sub-title">特色榜</div>
-        <div class="area">
-            <PlayMusicCard
-                class="play-music"
-                v-for="item in specialSongsItems"
-                :listen-num="item.listenNum"
-                :pic-url="item.picUrl"
-            />
-        </div>
-        <div class="sub-title">全球榜</div>
-        <div class="area">
-            <PlayMusicCard
-                class="play-music"
-                v-for="item in globalSongsItems"
-                :listen-num="item.listenNum"
-                :pic-url="item.picUrl"
-            />
-        </div>
-    </div>
-    <div v-if="tab === 2">
-        <div class="btn-group">
-            <VaButton
-              v-for="item in countryBtn"
-              round
-              preset="primary"
-              style="width: 80px;"
-              @click="singerParams.area = item.id"
-            >
-                {{ item.name }}
-            </VaButton>
-        </div>
-        <div class="album">
-            <div class="btn-group" >
+        <div v-if="tab === 2">
+            <div class="btn-group">
                 <VaButton
-                    v-for="item in sexBtn"
-                    round
-                    preset="primary"
-                    style="width: 80px;"
-                    @click="singerParams.sex = item.id"
+                v-for="item in countryBtn"
+                round
+                preset="primary"
+                style="width: 80px;"
+                @click="singerParams.area = item.id"
                 >
                     {{ item.name }}
                 </VaButton>
             </div>
-            <VaMenu :options="genreBtn">
-                <template #anchor>
-                    <VaButton preset="plain">全部</VaButton>
-                </template>
-            </VaMenu>
-        </div>
-        <div class="btn-group">
-            <VaButton
-              v-for="item in indexBtn"
-              preset="plain"
-              @click="singerParams.index = item.id"
-            >
-                {{ item.name }}
-            </VaButton>
-        </div>
-        <div class="singer-list">
-            <div class="singer-item" v-for="item in singerList">
-                <img class="singer-img" :src="item.singer_pic">
-                <span style="cursor: pointer;">{{ item.singer_name }}</span>
+            <div class="album">
+                <div class="btn-group" >
+                    <VaButton
+                        v-for="item in sexBtn"
+                        round
+                        preset="primary"
+                        style="width: 80px;"
+                        @click="singerParams.sex = item.id"
+                    >
+                        {{ item.name }}
+                    </VaButton>
+                </div>
+                <VaMenu :options="genreBtn">
+                    <template #anchor>
+                        <VaButton preset="plain">全部</VaButton>
+                    </template>
+                </VaMenu>
             </div>
+            <div class="btn-group">
+                <VaButton
+                v-for="item in indexBtn"
+                preset="plain"
+                @click="singerParams.index = item.id"
+                >
+                    {{ item.name }}
+                </VaButton>
+            </div>
+            <div class="singer-list">
+                <div class="singer-item" v-for="item in singerList">
+                    <img class="singer-img" :src="item.singer_pic">
+                    <span style="cursor: pointer;">{{ item.singer_name }}</span>
+                </div>
+            </div>
+            <BottomLoading
+            @infinite-scroll="infiniteSinger"
+            :disabled="singerList.length === total"
+            />
         </div>
-        <BottomLoading
-          @infinite-scroll="infiniteSinger"
-          :disabled="singerList.length === total"
-        />
-    </div>
-    <div v-if="tab === 3">
-        <div class="btn-group">
-            <VaButton
-              preset="primary"
-              v-for="item in PlaylistBtn"
-              style="width: 100px;"
-            >{{ item.name }}</VaButton>
+        <div v-if="tab === 3">
+            <div class="btn-group">
+                <VaButton
+                preset="primary"
+                v-for="item in PlaylistBtn"
+                style="width: 100px;"
+                >{{ item.name }}</VaButton>
+            </div>
         </div>
     </div>
 </template>
@@ -138,13 +140,14 @@ import TopMusicCard from '@/components/Musicshop/TopMusicCard.vue';
 import PlayMusicCard from '@/components/Musicshop/PlayMusicCard.vue';
 import BottomLoading from '@/components/BottomLoading.vue';
 import { getRecommendPlaylist, getNewSongs, getBanner } from '@/api/recommend';
+import { getSingerCategory, getSingerList } from '@/api/singer';
 import { getTop } from '@/api/top';
 import { getSonglistByCategory, getSonglistCategory } from '@/api/songlist';
-
 import { onMounted, ref, watch } from 'vue';
-import { getSingerCategory, getSingerList } from '@/api/singer';
 
 const tabs = ['精选', '排行', '歌手', '分类歌单'];
+
+const loading = ref(true);
 
 const carouselValue = ref(0);
 
@@ -264,6 +267,7 @@ onMounted(async()=>{
     getSinger();
     getSonglist();
     getSonglistCategory();
+    loading.value = false;
 });
 </script>
 <style scoped>
@@ -325,5 +329,11 @@ onMounted(async()=>{
     border-radius: 50%;
     margin-bottom: 15px;
     cursor: pointer;
+}
+.loading {
+    flex: 1;
+}
+:deep(.va-carousel__indicators) {
+    z-index: 1;
 }
 </style>

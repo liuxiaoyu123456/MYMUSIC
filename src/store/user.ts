@@ -4,6 +4,7 @@ interface myUser {
     isLogin: boolean,
     userInfo: any,
     mymusic: any,
+    myRoute: any,
 }
 
 export const useUserInfo = defineStore('user',{
@@ -11,6 +12,10 @@ export const useUserInfo = defineStore('user',{
         isLogin: false,
         userInfo: {},
         mymusic: [],
+        myRoute: [
+          { icon: 'access_time', title: '最近播放', route: '/'},
+          { icon: 'download', title: '本地和下载', route: 'local'},
+        ]
     }),
 
     actions: {
@@ -21,6 +26,12 @@ export const useUserInfo = defineStore('user',{
 
         setLogin() {
             this.isLogin = true;
+        },
+
+        changeMyRoute() {
+            this.myRoute.unshift(
+                { icon: 'favorite_border', title: '喜欢', route: 'like' }
+            )
         }
     },
 

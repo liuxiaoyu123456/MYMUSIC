@@ -5,28 +5,30 @@
             <div class="conten-box">
                 <div class="header">
                     <Search/>
-                    <div class="action">
-                        <VaButton v-if="userInfo.nick" round gradient>
+                    <div>
+                        <VaButton v-if="isLogin" round gradient>
                             <template #prepend>
                                 <VaAvatar :src="userInfo.headpic" size="25px" />
                             </template>
                             {{ userInfo.nick }}
                         </VaButton>
                         <VaButton v-else preset="secondary">点击登录</VaButton>
-                        <MenuList placement="bottom" :items="options" @change-select="select">
-                            <VaButton size="large" preset="plain" icon="settings"/>
-                        </MenuList>
-                        <VaButton preset="plain" size="large" @click="onMin">
-                            <template #append>
-                                <font-awesome-icon icon="fa-regular fa-window-minimize" />
-                            </template>
-                        </VaButton>
-                        <VaButton preset="plain" size="large" @click="onResize">
-                            <template #append>
-                                <font-awesome-icon :icon="max? 'fa-regular fa-window-restore':'fa-regular fa-window-maximize'" />
-                            </template>
-                        </VaButton>
-                        <VaButton @click="onClose" size="large" preset="plain" icon="close" />
+                        <div class="action">
+                            <MenuList placement="bottom" :items="options" @change-select="select">
+                                <VaButton size="large" preset="plain" icon="settings"/>
+                            </MenuList>
+                            <VaButton preset="plain" size="large" @click="onMin">
+                                <template #append>
+                                    <font-awesome-icon icon="fa-regular fa-window-minimize" />
+                                </template>
+                            </VaButton>
+                            <VaButton preset="plain" size="large" @click="onResize">
+                                <template #append>
+                                    <font-awesome-icon :icon="max? 'fa-regular fa-window-restore':'fa-regular fa-window-maximize'" />
+                                </template>
+                            </VaButton>
+                            <VaButton @click="onClose" size="large" preset="plain" icon="close" />
+                        </div>
                     </div>
                 </div>
                 <div class="content">
@@ -54,7 +56,7 @@ const playerShow = ref(false);
 
 const max = ref(false);
 
-const { userInfo } = storeToRefs(useUserInfo());
+const { userInfo, isLogin } = storeToRefs(useUserInfo());
 
 const options = [
     { text: '设置', icon: 'settings', value: 'settings' },
@@ -110,10 +112,12 @@ const onMin = () => {
 </script>
 <style scoped>
 .action {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    width: 240px;
+    width: 120px;
     justify-content: space-between;
+    height: 36px;
+    margin-left: 10px;
 }
 .home {
     height: 100vh;

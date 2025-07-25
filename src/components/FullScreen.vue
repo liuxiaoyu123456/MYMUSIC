@@ -6,7 +6,10 @@
     :background-color="color"
   >
     <div class="content">
-        
+      <div class="sing-box">
+        <!-- 封面 -->
+         
+      </div>
     </div>
   </VaModal>
 </template>
@@ -29,11 +32,21 @@ watch(
 </script>
 <style scoped>
 .content {
-  background-color: rgba(46, 44, 44, 0.18);
+  background-color: rgba(46, 44, 44, 0.285);
   backdrop-filter: blur(10px);
   height: 100vh;
+  position: relative;
 }
 :deep(.va-modal__close) {
   color: #fff;
+}
+.sing-box {
+  height: 80vh;
+  width: 80vw;
+  background-color: black;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

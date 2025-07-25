@@ -17,7 +17,7 @@
       </VaSidebarItem>
       <div class="sider-title">我的音乐</div>
       <VaSidebarItem
-        v-for="item in my"
+        v-for="item in myRoute"
         :active="page === item.title"
         @click="clickMenu(item)"
       >
@@ -51,10 +51,16 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import router from '../router';
+import router from '@/router';
+import { useUserInfo } from '@/store/user';
 import SideBar from '@/types/sidebar.ts';
+import { storeToRefs } from 'pinia';
 
 const page = ref('home');
+
+const store = useUserInfo();
+
+const { myRoute } = storeToRefs(store);
 
 const online = [
     {
@@ -71,23 +77,10 @@ const online = [
     }
 ]
 
-const my = [
-    {
-        icon: 'favorite_border', title: '喜欢', route: '/like',
-    },
-    {
-        icon: 'access_time', title: '最近播放', route: '/'
-    },
-    {
-        icon: 'download', title: '本地和下载', route: 'local'
-    }
-]
-
 const clickMenu = (item: SideBar) => {
     router.push(item.route);
     page.value = item.title;
 };
-
 </script>
 <style scoped>
 .sider {

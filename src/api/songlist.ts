@@ -14,7 +14,7 @@ export const getSonglistCategory = async() => {
     const { data } = await axios({
         url: '/songlist/category',
     })
-    console.log(data);
+    // console.log(data);
     return data;
 };
 

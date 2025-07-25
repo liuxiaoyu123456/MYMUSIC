@@ -8,12 +8,13 @@ import { onMounted } from 'vue';
 import { userRefresh, getUserDetail } from '@/api/user';
 import { useUserInfo } from '@/store/user';
 
-const { setLogin, userInfo, setUserInfo } = useUserInfo();
+const { setLogin, userInfo, setUserInfo, changeMyRoute } = useUserInfo();
 
 onMounted(async()=>{
   const { data } = await userRefresh();
   if(data.result === 200) {
     setLogin();
+    changeMyRoute();
     if(JSON.stringify(userInfo)=='{}'){
         const { data } = await getUserDetail();
         setUserInfo(data.data);
