@@ -209,6 +209,8 @@ watch(
 .content {
     padding: 0 10px;
     overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--va-shadow) transparent;
 }
 .player-list {
     position: absolute;

@@ -18,10 +18,10 @@ const createWindow = () => {
     const win = new BrowserWindow({
         // 窗口图标
         icon: join(__dirname, '/src/assets/icon.png'),
-        width: 1000,
-        height: 625,
-        minWidth: 1000,
-        minHeight: 625,
+        width: 1200,
+        height: 720,
+        minWidth: 1200,
+        minHeight: 720,
         frame: false,
         webPreferences: {
             nodeIntegration: true,

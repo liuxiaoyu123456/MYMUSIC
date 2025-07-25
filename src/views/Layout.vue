@@ -149,6 +149,8 @@ const onMin = () => {
     overflow: auto;
     display: flex;
     flex-direction: column;
+    scrollbar-width: thin;
+    scrollbar-color: var(--va-shadow) transparent;
 }
 .content > * {
   flex-shrink: 0;

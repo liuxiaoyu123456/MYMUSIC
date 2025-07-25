@@ -1,53 +1,52 @@
 <template>
-  <div class="sider">
-    <VaSidebar>
+    <VaSidebar style="overflow: hidden;">
       <div class="logo">
         <img src="@/assets/logo.png">
       </div>
-      <div class="sider-title">在线音乐</div>
-      <VaSidebarItem
-        v-for="item in online"
-        :active="page === item.title"
-        @click="clickMenu(item)"
-      >
-        <VaSidebarItemContent>
-          <VaIcon :name="item.icon" />
-          <VaSidebarItemTitle>{{ item.title }}</VaSidebarItemTitle>
-        </VaSidebarItemContent>
-      </VaSidebarItem>
-      <div class="sider-title">我的音乐</div>
-      <VaSidebarItem
-        v-for="item in myRoute"
-        :active="page === item.title"
-        @click="clickMenu(item)"
-      >
-        <VaSidebarItemContent>
-          <VaIcon :name="item.icon" />
-          <VaSidebarItemTitle>{{ item.title }}</VaSidebarItemTitle>
-        </VaSidebarItemContent>
-      </VaSidebarItem>
-      <VaCollapse>
-          <template #header="{ value: isCollapsed }">
-            <VaSidebarItem>
-              <VaSidebarItemContent>
-                <VaIcon name="library_music" />
-                <VaSidebarItemTitle>歌单</VaSidebarItemTitle>
-                <VaSpacer />
-                <VaIcon :name="isCollapsed ? 'va-arrow-up' : 'va-arrow-down'" />
-              </VaSidebarItemContent>
-            </VaSidebarItem>
-          </template>
-          <template #body>
-            <VaSidebarItem>
-              <VaSidebarItemContent>
-                <VaSidebarItemTitle>我的歌单</VaSidebarItemTitle>
-              </VaSidebarItemContent>
-            </VaSidebarItem>
-          </template>
-      </VaCollapse>
+      <div class="sider">
+        <div class="sider-title">在线音乐</div>
+        <VaSidebarItem
+          v-for="item in online"
+          :active="page === item.title"
+          @click="clickMenu(item)"
+        >
+          <VaSidebarItemContent>
+            <VaIcon :name="item.icon" />
+            <VaSidebarItemTitle>{{ item.title }}</VaSidebarItemTitle>
+          </VaSidebarItemContent>
+        </VaSidebarItem>
+        <div class="sider-title">我的音乐</div>
+        <VaSidebarItem
+          v-for="item in myRoute"
+          :active="page === item.title"
+          @click="clickMenu(item)"
+        >
+          <VaSidebarItemContent>
+            <VaIcon :name="item.icon" />
+            <VaSidebarItemTitle>{{ item.title }}</VaSidebarItemTitle>
+          </VaSidebarItemContent>
+        </VaSidebarItem>
+        <VaCollapse>
+            <template #header="{ value: isCollapsed }">
+              <VaSidebarItem>
+                <VaSidebarItemContent>
+                  <VaIcon name="library_music" />
+                  <VaSidebarItemTitle>歌单</VaSidebarItemTitle>
+                  <VaSpacer />
+                  <VaIcon :name="isCollapsed ? 'va-arrow-up' : 'va-arrow-down'" />
+                </VaSidebarItemContent>
+              </VaSidebarItem>
+            </template>
+            <template #body>
+              <VaSidebarItem>
+                <VaSidebarItemContent>
+                  <VaSidebarItemTitle>我的歌单</VaSidebarItemTitle>
+                </VaSidebarItemContent>
+              </VaSidebarItem>
+            </template>
+        </VaCollapse>
+      </div>
     </VaSidebar>
-  </div>
-    
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
@@ -83,10 +82,6 @@ const clickMenu = (item: SideBar) => {
 };
 </script>
 <style scoped>
-.sider {
-  position: relative;
-  /* z-index: 0; */
-}
 .sider-title {
     height: 58px;
     padding-left: 20px;
