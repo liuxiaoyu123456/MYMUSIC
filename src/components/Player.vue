@@ -106,7 +106,7 @@
 import MenuList from '@/components/MenuList.vue';
 import RateModal from '@/components/RateModal.vue';
 import PlayPic from '@/components/PlayPic.vue';
-import FullScreen from '@/components/FullScreen.vue';
+import FullScreen from '@/components/FullScreen/FullScreen.vue';
 import DownloadModal from '@/components/DownloadModal.vue';
 import { ref, watch } from 'vue';
 import { useAudio } from '@/store/audio';

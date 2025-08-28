@@ -22,7 +22,6 @@ import { usePlayList } from '@/store/play';
 import { fuzzySearch } from '@/utils';
 import { onBeforeUnmount, ref } from 'vue';
 import EmptyMusic from '@/assets/empty.svg';
-import EmptyVideo from '@/assets/empty-video.svg';
 import { storeToRefs } from 'pinia';
 
 const ipcRenderer = require('electron').ipcRenderer;

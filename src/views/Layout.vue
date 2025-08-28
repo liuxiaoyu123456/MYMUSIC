@@ -12,7 +12,7 @@
                             </template>
                             {{ userInfo.nick }}
                         </VaButton>
-                        <VaButton v-else preset="secondary">点击登录</VaButton>
+                        <VaButton v-else preset="secondary" @click="router.push('/login')">点击登录</VaButton>
                         <div class="action">
                             <MenuList placement="bottom" :items="options" @change-select="select">
                                 <VaButton size="large" preset="plain" icon="settings"/>

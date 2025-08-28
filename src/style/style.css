@@ -1,10 +1,11 @@
 .sider  {
   overflow: auto;
-  scrollbar-width: thin;
+  scrollbar-width: none;
   scrollbar-color: transparent transparent;
 }
 
 .sider:hover {
+  scrollbar-width: thin;
   scrollbar-color: var(--va-shadow) transparent;
 }
 
