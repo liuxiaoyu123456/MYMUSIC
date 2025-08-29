@@ -1,5 +1,5 @@
 <template>
-    <div class="comment">
+      <VaInfiniteScroll :load="infiniteComment" :disabled="disabled">
         <Tabs :items="commentItems" />
         <VaTextarea
           v-model="comment"
@@ -18,16 +18,11 @@
         </div>
         <div class="comment-title">全部评论</div> 
         <CommentItem v-for="item in commentList" :data="item"/>
-        <BottomLoading
-          @infinite-scroll="infiniteComment"
-          :disabled="commentList.length === total"
-        />
-    </div>
+      </VaInfiniteScroll>
 </template>
 <script setup lang="ts">
 import Tabs from '@/components/Tabs.vue';
 import CommentItem from '@/components/CommentItem.vue';
-import BottomLoading from '@/components/BottomLoading.vue';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { getComment } from '@/api/comment';
@@ -44,25 +39,39 @@ const commentList = ref([]);
 
 const pageNo = ref(1);
 
+const disabled = ref(false);
+
 const getCommentList = async() => {
     const id = route.query.id as unknown as number;
     const { data } = await getComment(id, pageNo.value);
-    commentList.value = commentList.value.concat(data.comment.commentlist);
-    total.value = data.comment.commenttotal;
+    return data;
 };
 
-const infiniteComment = () => {
+const infiniteComment = async() => {
     pageNo.value = pageNo.value + 1;
-    getCommentList();
+    const data = await getCommentList();
+    if(data.comment.commentlist === null) {
+        disabled.value = true;
+        return
+    }
+    commentList.value = commentList.value.concat(data.comment.commentlist);
+    checkDisabled();
 };
 
-onMounted(()=>{
-    getCommentList();
+const checkDisabled = () => {
+    if(commentList.value.length === total.value) {
+        disabled.value = true;
+    }
+}
+
+onMounted(async()=>{
+    const data = await getCommentList();
+    commentList.value = data.comment.commentlist;
+    total.value = data.comment.commenttotal;
+    checkDisabled();
 })
 </script>
 <style scoped>
-.comment {
-}
 .text-area {
     width: 100%;
     margin-top: 20px;
