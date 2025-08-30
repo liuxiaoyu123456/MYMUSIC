@@ -33,3 +33,8 @@
 
 </details>
 
+## 后端接口
+> 一款基于Node.js的QQ音乐接口，借用的开源项目
+
+[Node.js语言编写的QQ音乐后端接口QQMusicApi](https://github.com/jsososo/QQMusicApi)
+
