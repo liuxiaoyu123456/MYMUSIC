@@ -79,8 +79,14 @@ router.beforeEach(async(to, from, next) => {
     } else {
         // 判断是否登录
         const { isLogin } = useUserInfo();
+        console.log(to.fullPath)
         if(!isLogin) {
-            next('login');
+            next({
+                path: '/login',
+                query: {
+                    redirect: to.fullPath,
+                }
+            });
         }else {
             next();
         }

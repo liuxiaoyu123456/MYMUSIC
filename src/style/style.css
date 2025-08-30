@@ -9,3 +9,6 @@
   scrollbar-color: var(--va-shadow) transparent;
 }
 
+.no-drag {
+  -webkit-app-region: no-drag;
+}

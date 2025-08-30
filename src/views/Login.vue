@@ -1,5 +1,13 @@
 <template>
     <div class="login">
+        <VaButton
+          round
+          icon="keyboard_arrow_left"
+          class="return"
+          background-opacity="0.8"
+          color="backgroundPrimary"
+          @click="router.go(-1)"
+        />
         <div class="box">
             <VaCard>
                 <VaCardContent class="content">
@@ -10,36 +18,36 @@
                         <div class="item">
                            <span class="label">QQ号</span>
                            <VaInput
+                             class="no-drag"
                              v-model="loginForm.username"
                              placeholder="请输入QQ"
                              :rules="[(value) => (value && value.length > 0) || 'QQ必须填写！']"
-                            /> 
+                            />
                         </div>
-                        <!-- <div class="item">
-                            <span class="label">密码</span>
-                            <VaInput
-                              v-model="loginForm.password"
-                              placeholder="请输入密码"
-                              type="password"
-                              :rules="[(value) => (value && value.length > 0) || '密码必须填写！']"
-                            /> 
-                        </div> -->
+                        <div class="item">
+                            <span class="label">Cookie</span>
+                            <VaTextarea
+                              class="no-drag"
+                              v-model="loginForm.cookie"
+                              placeholder="请填入cookie值"
+                              max-rows="3"
+                              min-rows="3"
+                              :autosize="true"
+                              :rules="[(value) => (value && value.length > 0) || 'Cookie必须填写！']"
+                            />
+                        </div>
                         <div class="remember">
                             <VaCheckbox
-                                v-model="loginForm.remember"
-                                label="记住我"
+                              class="no-drag"
+                              v-model="loginForm.remember"
+                              label="记住我"
                             />
-                            <!-- <VaButton preset="plain">忘记密码？</VaButton> -->
                         </div>
                     </VaForm>
                     <VaButton
                       class="submit"
                       @click="login"
                     >登录</VaButton>
-                    <!-- <div class="tip">
-                        还没有注册？
-                        <VaButton preset="plain">去注册</VaButton>
-                    </div> -->
                 </VaCardContent>
             </VaCard>
         </div>
@@ -49,20 +57,26 @@
 import { ref } from 'vue';
 import { useForm } from 'vuestic-ui';
 import { getCookie, setCookie } from '@/api/user';
-import router from '@/router';
+import { useRoute, useRouter } from 'vue-router';
+
+const route = useRoute();
+
+const router = useRouter();
 
 const loginForm = ref({
     username: '',
+    cookie: '',
     remember: false,
 })
 
 const { validate } = useForm('Login');
 
-const login = () => {
+const login = async() => {
     if(validate()) {
-        setCookie();
-        getCookie(loginForm.value.username);
-        router.push('/local');
+        setCookie(loginForm.value.cookie);
+        await getCookie(loginForm.value.username);
+        const redirect = route.query.redirect || '/';
+        router.replace(redirect as unknown as string);
     }
 };
 </script>
@@ -73,6 +87,11 @@ const login = () => {
     overflow: hidden;
     background-image: url('@/assets/login.jpg');
     background-size: cover;
+    position: relative;
+    -webkit-app-region: drag;
+}
+button {
+    -webkit-app-region: no-drag;
 }
 .box {
     width: 500px;
@@ -117,5 +136,10 @@ const login = () => {
 .tip {
     text-align: center;
     margin: 50px auto 0px;
+}
+.return {
+    position: absolute;
+    top: 20px;
+    left: 20px;
 }
 </style>

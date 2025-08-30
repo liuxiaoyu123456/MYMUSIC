@@ -12,7 +12,7 @@
                             </template>
                             {{ userInfo.nick }}
                         </VaButton>
-                        <VaButton v-else preset="secondary" @click="router.push('/login')">点击登录</VaButton>
+                        <VaButton v-else preset="secondary" @click="toLogin">点击登录</VaButton>
                         <div class="action">
                             <MenuList placement="bottom" :items="options" @change-select="select">
                                 <VaButton size="large" preset="plain" icon="settings"/>
@@ -51,8 +51,11 @@ import { ref } from 'vue';
 import { useUserInfo } from '@/store/user';
 import { storeToRefs } from 'pinia';
 import router from '@/router';
+import { useRoute } from 'vue-router';
 
 const playerShow = ref(false);
+
+const route = useRoute();
 
 const max = ref(false);
 
@@ -94,6 +97,15 @@ const select = (item: any) => {
             router.push('/settings');
     }
 }
+
+const toLogin = () => {
+    router.push({
+        path: '/login',
+        query: {
+            redirect: route.fullPath,
+        }
+    })
+};
 
 let ipcRenderer = require('electron').ipcRenderer;
 
