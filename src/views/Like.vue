@@ -1,17 +1,22 @@
 <template>
-    <div class="like">
-        <div v-if="!batchMode" class="title">喜欢</div>
-        <Tabs v-if="!batchMode" :items="likeItems" class="tab"/>
-        <MusicTable
-          :items="likeLists"
-          :columns="columns"
-          :select="batchMode"
-        />
-    </div>
+    <div v-if="!batchMode" class="title">喜欢</div>
+    <Tabs v-if="!batchMode" :items="likeItems" class="tab"/>
+    <VaInnerLoading class="loading" loading v-if="loading" />
+    <div v-else>
+      <MusicTable
+        v-if="likeLists.length"
+        :items="likeLists"
+        :columns="columns"
+        :select="batchMode"
+      />
+      <Empty v-else :empty-img="EmptyMusic" tip="暂时没有喜欢的音乐"/>
+    </div> 
 </template>
 <script setup lang="ts">
 import Tabs from '@/components/Tabs.vue';
 import MusicTable from '@/components/MusicTable.vue';
+import Empty from '@/components/Empty.vue';
+import EmptyMusic from '@/assets/empty.svg';
 import { getSonglist } from '@/api/songlist';
 import { useUserInfo } from '@/store/user';
 import { usePlayList } from '@/store/play';
@@ -27,7 +32,10 @@ const { setLike } = store;
 const { likeLists } = storeToRefs(store);
 
 const likeItems = ['歌曲', '歌单', '专辑', '有声节目', '视频'];
+
 const batchMode = ref(false);
+
+const loading = ref(true);
 
 const changeBatch = (val: boolean) => {
     batchMode.value = val;
@@ -50,7 +58,8 @@ const getLikeList = async(id: string) => {
 
 onMounted(async()=>{
   likeLists.value = [];
-  getLikeList(mymusic[0].id);
+  await getLikeList(mymusic[0].id);
+  loading.value = false;
 })
 </script>
 <style scoped>
@@ -73,5 +82,8 @@ onMounted(async()=>{
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+.loading {
+  flex: 1;
 }
 </style>
