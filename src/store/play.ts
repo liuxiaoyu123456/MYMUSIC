@@ -35,7 +35,7 @@ export const usePlayList = defineStore('play', {
                 this.playList.push(item);
                 init({
                     message: '成功添加',
-                    color: 'success'
+                    color: 'success',
                 })
             }
         },

@@ -34,13 +34,13 @@ export const setCookie = (cookie: string) => {
     return res;
 };
 
-export const getUserDetail = () => {
+export const getUserDetail = (id: string) => {
     const res = axios({
         method: 'get',
         url: '/user/detail',
         params: {
-            id: '2717617783',
+            id,
         }
     })
     return res;
-}
+};

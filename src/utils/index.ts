@@ -46,11 +46,6 @@ export const getImage = (pic: IPicture[])=> {
   return picSrc;
 };
 
-export const isLogin = async() => {
-  const { data } = await getUserDetail();
-  return data;
-};
-
 export const getListen = (num: number) => {
   // 将数字除以10000，并保留一位小数
     const result = `${(num / 10000).toFixed(1)}万`;

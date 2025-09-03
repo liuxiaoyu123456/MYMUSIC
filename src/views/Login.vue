@@ -57,7 +57,11 @@
 import { ref } from 'vue';
 import { useForm } from 'vuestic-ui';
 import { getCookie, setCookie } from '@/api/user';
+import { getUserDetail } from '@/api/user';
 import { useRoute, useRouter } from 'vue-router';
+import { useUserInfo } from '@/store/user';
+
+const { setQQ, setLogin, changeMyRoute, userInfo, getQQ, setUserInfo } = useUserInfo();
 
 const route = useRoute();
 
@@ -73,8 +77,16 @@ const { validate } = useForm('Login');
 
 const login = async() => {
     if(validate()) {
+        setQQ(loginForm.value.username);
         setCookie(loginForm.value.cookie);
         await getCookie(loginForm.value.username);
+        setLogin();
+        changeMyRoute();
+        if(JSON.stringify(userInfo)=='{}'){
+            const qq = getQQ();
+            const { data } = await getUserDetail(qq);
+            setUserInfo(data.data);
+        }
         const redirect = route.query.redirect || '/';
         router.replace(redirect as unknown as string);
     }

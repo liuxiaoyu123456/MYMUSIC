@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 interface myUser {
     isLogin: boolean,
     userInfo: any,
+    qq: string,
     mymusic: any,
     myRoute: any,
 }
@@ -11,6 +12,7 @@ export const useUserInfo = defineStore('user',{
     state: (): myUser => ({
         isLogin: false,
         userInfo: {},
+        qq: '',
         mymusic: [],
         myRoute: [
           { icon: 'access_time', title: '最近播放', route: '/'},
@@ -19,6 +21,15 @@ export const useUserInfo = defineStore('user',{
     }),
 
     actions: {
+        setQQ(id: string) {
+            this.qq = id;
+            console.log(this.qq)
+        },
+
+        getQQ() {
+            return this.qq;
+        },
+
         setUserInfo(data: object) {
             this.userInfo = data.creator;
             this.mymusic = data.mymusic;
@@ -38,6 +49,6 @@ export const useUserInfo = defineStore('user',{
     persist: {
         key: 'user',
         storage: localStorage,
-        pick: ['mymusic'],
+        pick: ['mymusic', 'qq'],
     },
 })

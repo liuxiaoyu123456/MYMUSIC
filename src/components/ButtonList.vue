@@ -3,24 +3,40 @@
         <div class="left">
             <VaButton class="btn" round :icon="playIcon" preset="primary" @click="play">播放</VaButton>
             <VaButton class="btn" round icon="add_circle_outline" preset="primary" @click="addFile">添加</VaButton>
-            <VaButton class="btn" round icon="checklist" preset="primary" @click="batchAction = true;">批量</VaButton>
+            <VaButton
+              class="btn"
+              round
+              icon="checklist"
+              preset="primary"
+              @click="batchAction = true;
+              emit('changeFilter', false);
+              selectStatus = false"
+            >批量</VaButton>
             <VaButton v-if="batchAction" class="btn" round icon="delete_outline" preset="primary" @click="Delete">删除</VaButton>
         </div>
-        <VaInput
-          v-if="!batchAction"
-          v-model="keyWord"
-          placeholder="搜索音乐"
-          preset="solid"
-          clearable
-          @keydown="searchMusic"
-        >
-            <template #prependInner>
-                <VaIcon
-                  name="search"
-                  color="secondary"
-                />
-            </template>
-        </VaInput>
+        <div v-if="!batchAction">
+            <VaInput
+              v-model="keyWord"
+              placeholder="搜索音乐"
+              preset="solid"
+              clearable
+              @keydown="searchMusic"
+            >
+                <template #prependInner>
+                    <VaIcon
+                      name="search"
+                      color="secondary"
+                    />
+                </template>
+            </VaInput>
+            <VaButton 
+              @click="changeSelect"
+              class="btn"
+              round
+              :icon="selectStatus? 'filter_list_off' : 'filter_list'"
+              preset="primary"
+            >筛选</VaButton>
+        </div>
         <VaButton
           v-else
           icon="close"
@@ -57,9 +73,12 @@ const keyWord = ref('');
 
 const playIcon = ref('play_arrow');
 
+const selectStatus = ref(false);
+
 const emit = defineEmits<{
     (e: 'batch-change', value: boolean): void,
     (e: 'search', value: string): void,
+    (e: 'changeFilter', value: boolean): void
 }>();
 
 const batchAction = ref(false);
@@ -128,6 +147,11 @@ const searchMusic = (e: KeyboardEvent) => {
     if(e.key === 'Enter') {
         emit('search', keyWord.value);
     }
+};
+
+const changeSelect = () => {
+    selectStatus.value = !selectStatus.value;
+    emit('changeFilter', selectStatus.value);
 };
 
 watch(

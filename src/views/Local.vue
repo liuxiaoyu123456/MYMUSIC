@@ -3,8 +3,10 @@
     <Tabs v-if="!batchMode" :items="tabs"/>
     <ButtonList
       @batch-change="changeBatch"
+      @change-filter="filterChange"
       @search="searchSongs"
     />
+    <Filter v-if="filter"/>
     <MusicTable
       v-if="localSongs.length !== 0"
       :items="localSongs"
@@ -17,6 +19,7 @@
 import Tabs from '@/components/Tabs.vue';
 import MusicTable from '@/components/MusicTable.vue';
 import ButtonList from '@/components/ButtonList.vue';
+import Filter from '@/components/Filter.vue';
 import Empty from '@/components/Empty.vue';
 import { usePlayList } from '@/store/play';
 import { fuzzySearch } from '@/utils';
@@ -48,8 +51,14 @@ const batchMode = ref(false);
 
 const tipEmpty = ref('暂时没有音乐');
 
+const filter = ref(false);
+
 const changeBatch = (val: boolean) => {
     batchMode.value = val;
+};
+
+const filterChange = (val: boolean) => {
+    filter.value = val;
 };
 
 const searchSongs = (val: string) => {
