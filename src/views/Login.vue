@@ -61,7 +61,7 @@ import { getUserDetail } from '@/api/user';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserInfo } from '@/store/user';
 
-const { setQQ, setLogin, changeMyRoute, userInfo, getQQ, setUserInfo } = useUserInfo();
+const { setQQ, setLogin, changeRoute, userInfo, getQQ, setUserInfo } = useUserInfo();
 
 const route = useRoute();
 
@@ -81,7 +81,7 @@ const login = async() => {
         setCookie(loginForm.value.cookie);
         await getCookie(loginForm.value.username);
         setLogin();
-        changeMyRoute();
+        changeRoute();
         if(JSON.stringify(userInfo)=='{}'){
             const qq = getQQ();
             const { data } = await getUserDetail(qq);

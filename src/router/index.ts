@@ -1,9 +1,6 @@
 /* 路由配置文件 index.ts */
 import { createWebHistory, createRouter } from 'vue-router';
 import { useUserInfo } from '@/store/user';
-import { getUserDetail, userRefresh } from '@/api/user';
-import { usePlayList } from '@/store/play';
-import { storeToRefs } from 'pinia';
  
 // 定义路由配置
 const routes = [
@@ -62,6 +59,11 @@ const routes = [
                 path: '/settings',
                 name: 'Settings',
                 component: () => import('@/views/Setting.vue'),
+            },
+            {
+                path: '/my',
+                name: 'My',
+                component: () => import('@/views/My.vue')
             }
         ]
     }

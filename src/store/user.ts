@@ -6,6 +6,7 @@ interface myUser {
     qq: string,
     mymusic: any,
     myRoute: any,
+    netWorkRoute: any,
 }
 
 export const useUserInfo = defineStore('user',{
@@ -17,6 +18,11 @@ export const useUserInfo = defineStore('user',{
         myRoute: [
           { icon: 'access_time', title: '最近播放', route: '/'},
           { icon: 'download', title: '本地和下载', route: 'local'},
+        ],
+        netWorkRoute: [
+            { icon: 'music_video', title: '乐馆', route: '/musicShop' },
+            { icon: 'videocam', title: '视频', route: '/videoDetail' },
+            { icon: 'radar', title: '雷达', route: '/' },
         ]
     }),
 
@@ -39,11 +45,14 @@ export const useUserInfo = defineStore('user',{
             this.isLogin = true;
         },
 
-        changeMyRoute() {
+        changeRoute() {
             this.myRoute.unshift(
                 { icon: 'favorite_border', title: '喜欢', route: 'like' }
             )
-        }
+            this.netWorkRoute.unshift(
+                { icon: 'home', title: '推荐', route: '/recommend' }
+            )
+        },
     },
 
     persist: {

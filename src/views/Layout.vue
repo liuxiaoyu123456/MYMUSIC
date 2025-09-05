@@ -6,7 +6,7 @@
                 <div class="header">
                     <Search/>
                     <div>
-                        <VaButton v-if="isLogin" round gradient>
+                        <VaButton v-if="isLogin" round gradient @click="router.push('/my')">
                             <template #prepend>
                                 <VaAvatar :src="userInfo.headpic" size="25px" />
                             </template>

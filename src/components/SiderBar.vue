@@ -6,7 +6,7 @@
       <div class="sider">
         <div class="sider-title">在线音乐</div>
         <VaSidebarItem
-          v-for="item in online"
+          v-for="item in netWorkRoute"
           :active="page === item.title"
           @click="clickMenu(item)"
         >
@@ -59,22 +59,7 @@ const page = ref('home');
 
 const store = useUserInfo();
 
-const { myRoute } = storeToRefs(store);
-
-const online = [
-    {
-        icon: 'home', title: '推荐', route: '/recommend'
-    },
-    {
-        icon: 'music_video', title: '乐馆', route: '/musicShop'
-    },
-    {
-        icon: 'videocam', title: '视频', route: '/videoDetail'
-    },
-    {
-        icon: 'radar', title: '雷达', route: '/'
-    }
-]
+const { myRoute, netWorkRoute } = storeToRefs(store);
 
 const clickMenu = (item: SideBar) => {
     router.push(item.route);
