@@ -39,3 +39,20 @@
 
 [QQMusicApi](https://github.com/jsososo/QQMusicApi)
 
+## 本地部署
+
+1.git克隆到本地
+```bash
+git clone https://github.com/liuxiaoyu123456/MYMUSIC.git
+```
+
+2.安装相应的包和依赖
+```bash
+npm install
+```
+
+3.electron运行
+```bash
+npm run electron:serve
+```
+
