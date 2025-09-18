@@ -42,5 +42,6 @@ export const getUserDetail = (id: string) => {
             id,
         }
     })
+    console.log(res);
     return res;
 };

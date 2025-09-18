@@ -122,12 +122,12 @@ const selectPlay = async(event: RowClickEvent) => {
     }
     if(!event.item.isPlaying) {
         stopMusic();
-        if(isLocal.value) {
+        if(event.item.local || event.item.songurl) {
             selectItem(event.item.id);
             const { playSrc } = usePlayList();
             createAudio([playSrc]);
             playMusic();
-        }else {
+        } else {
             let i = event.itemIndex;
             const urls = await getNetWorkUrls(i);
             if(urls.length!==0) {

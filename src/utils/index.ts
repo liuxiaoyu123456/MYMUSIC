@@ -168,3 +168,7 @@ export const getColors = async(imgUrl: string) => {
   // 返回 {rgb, hex}
   return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 };
+
+export const resetUrl = (url: string | undefined) => {
+  return url? url.slice(0, -1): '';
+};

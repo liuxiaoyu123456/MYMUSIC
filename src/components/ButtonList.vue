@@ -119,13 +119,14 @@ ipcRenderer.on('selected-file', (event: Event, selectedFilePath: string, file: I
     const item = {
         id,
         picSrc,
-        url: selectedFilePath,
+        songurl: selectedFilePath,
         sing: file.common.title,
         column: file.common.album,
         artist: file.common.artists?.join(","),
         length: getTime(file.format.duration!),
         size: formatFileSizeInMB(size),
         isPlaying: false,
+        local: true,
     }
     // 添加到播放列表
     addPlayItem(item);

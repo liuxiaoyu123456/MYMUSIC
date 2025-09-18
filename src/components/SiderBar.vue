@@ -26,7 +26,7 @@
             <VaSidebarItemTitle>{{ item.title }}</VaSidebarItemTitle>
           </VaSidebarItemContent>
         </VaSidebarItem>
-        <VaCollapse>
+        <VaCollapse v-if="isLogin">
             <template #header="{ value: isCollapsed }">
               <VaSidebarItem>
                 <VaSidebarItemContent>
@@ -59,7 +59,7 @@ const page = ref('home');
 
 const store = useUserInfo();
 
-const { myRoute, netWorkRoute } = storeToRefs(store);
+const { myRoute, netWorkRoute, isLogin } = storeToRefs(store);
 
 const clickMenu = (item: SideBar) => {
     router.push(item.route);

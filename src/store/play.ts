@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { useToast } from "vuestic-ui";
-import { getTime, getNetworkImage, getArtist } from "@/utils";
+import { getTime, getNetworkImage, getArtist, resetUrl } from "@/utils";
 
 const { init } = useToast();
 
@@ -24,7 +24,7 @@ export const usePlayList = defineStore('play', {
 
     actions: {
         addPlayItem(item) {
-            const lists = this.playList.map(item=>item.url);
+            const lists = this.playList.map(item=>item.songurl);
             if(lists.includes(item.url)){
                 init({
                     message: "重复添加！",
@@ -46,12 +46,13 @@ export const usePlayList = defineStore('play', {
                 if(item.id === num) {
                     item.isPlaying = true;
                     this.order = index;
+                    this.songId = item.songid;
                 }else {
                     item.isPlaying = false;
                 }
             })
             if(this.playList.length > 0){
-                this.playSrc = this.playList[this.order].url || '';
+                this.playSrc = this.playList[this.order].songurl || '';
                 this.singName = this.playList[this.order].sing;
                 this.singArtist = this.playList[this.order].artist;
                 this.playCover = this.playList[this.order].picSrc;
@@ -132,7 +133,7 @@ export const usePlayList = defineStore('play', {
 
         setLike(arr: any[]) {
             arr.forEach((item) => {
-                const like = {
+                let like = {
                     id: item.songmid,
                     songid: item.songid,
                     sing: item.songname,
@@ -142,6 +143,8 @@ export const usePlayList = defineStore('play', {
                     artist: getArtist(item.singer),
                     vid: item.vid,
                     isPlaying: false,
+                    local: false,
+                    songurl: resetUrl(item.songurl),
                 }
                 this.likeLists.push(like);
             })
@@ -149,6 +152,18 @@ export const usePlayList = defineStore('play', {
 
         setInitSongs (arr: any) {
             this.initSongs = arr;
+        },
+
+        setPlayingStatus() {
+            this.likeLists.forEach((item, i)=>{
+                if(item.songid === this.songId) {
+                    this.likeLists[i].isPlaying = true;
+                }
+            })
+        },
+
+        selectByKeys() {
+
         }
     },
 

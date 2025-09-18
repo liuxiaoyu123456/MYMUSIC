@@ -19,7 +19,7 @@ import Empty from '@/components/Empty.vue';
 import EmptyMusic from '@/assets/empty.svg';
 import { getSonglist } from '@/api/songlist';
 import { useUserInfo } from '@/store/user';
-import { usePlayList } from '@/store/play';
+import { usePlayList  } from '@/store/play';
 import { onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 
@@ -27,7 +27,7 @@ const { mymusic } = useUserInfo();
 
 const store = usePlayList();
 
-const { setLike } = store;
+const { setLike, setPlayingStatus } = store;
 
 const { likeLists } = storeToRefs(store);
 
@@ -59,6 +59,7 @@ const getLikeList = async(id: string) => {
 onMounted(async()=>{
   likeLists.value = [];
   await getLikeList(mymusic[0].id);
+  setPlayingStatus();
   loading.value = false;
 })
 </script>

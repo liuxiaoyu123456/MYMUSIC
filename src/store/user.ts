@@ -41,6 +41,13 @@ export const useUserInfo = defineStore('user',{
             this.mymusic = data.mymusic;
         },
 
+        getUserInfo() {
+            const res = {
+                headpic: this.userInfo.headpic
+            };
+            return res;
+        },
+
         setLogin() {
             this.isLogin = true;
         },
@@ -58,6 +65,6 @@ export const useUserInfo = defineStore('user',{
     persist: {
         key: 'user',
         storage: localStorage,
-        pick: ['mymusic', 'qq'],
+        pick: ['mymusic', 'qq', 'userInfo'],
     },
 })

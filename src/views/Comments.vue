@@ -29,8 +29,6 @@ import { getComment } from '@/api/comment';
 
 const route = useRoute();
 
-const total = ref(0);
-
 const commentItems = ['评论', '详情'];
 
 const comment = ref('');
@@ -55,11 +53,11 @@ const infiniteComment = async() => {
         return
     }
     commentList.value = commentList.value.concat(data.comment.commentlist);
-    checkDisabled();
+    checkDisabled(data.comment.commentlist);
 };
 
-const checkDisabled = () => {
-    if(commentList.value.length === total.value) {
+const checkDisabled = (data: any[]) => {
+    if(data.length < 20) {
         disabled.value = true;
     }
 }
@@ -67,8 +65,7 @@ const checkDisabled = () => {
 onMounted(async()=>{
     const data = await getCommentList();
     commentList.value = data.comment.commentlist;
-    total.value = data.comment.commenttotal;
-    checkDisabled();
+    checkDisabled(data.comment.commentlist);
 })
 </script>
 <style scoped>

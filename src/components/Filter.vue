@@ -3,14 +3,17 @@
       <VaForm class="form">
         <VaSelect
           v-model="filterForm.singer"
+          no-options-text="空白"
           label="艺术家"
         />
         <VaSelect
           v-model="filterForm.column"
+          no-options-text="空白"
           label="专辑"
         />
         <VaSelect
           v-model="filterForm.directory"
+          no-options-text="空白"
           label="文件夹"
         />
       </VaForm>
