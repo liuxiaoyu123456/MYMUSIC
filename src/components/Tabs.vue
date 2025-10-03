@@ -3,10 +3,9 @@ import { ref } from 'vue';
 
 defineProps<{ items: string[] }>()
 
-const value = ref(0);
 </script>
 <template>
-    <VaTabs v-model="value">
+    <VaTabs>
         <template #tabs>
             <VaTab
                 v-for="tab in items"

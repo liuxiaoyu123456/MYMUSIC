@@ -1,26 +1,31 @@
 <template>
     <div v-if="!batchMode" class="title">本地和下载</div>
-    <Tabs v-if="!batchMode" :items="tabs"/>
+    <Tabs v-if="!batchMode" :items="tabs" v-model="value"/>
     <ButtonList
       @batch-change="changeBatch"
       @change-filter="filterChange"
       @search="searchSongs"
     />
     <Filter v-if="filter"/>
-    <MusicTable
-      v-if="localSongs.length !== 0"
-      :items="localSongs"
-      :columns="columns"
-      :select="batchMode"
-    />
-    <Empty v-else :emptyImg="EmptyMusic" :tip="tipEmpty"/>
+    <div v-if="value === 0">
+        <MusicTable
+          v-if="localSongs.length !== 0"
+          :items="localSongs"
+          :columns="columns"
+          :select="batchMode"
+        />
+        <Empty v-else :emptyImg="EmptyMusic" :tip="tipEmptyMusic"/>
+    </div>
+    <div v-if="value === 1">
+        <Empty :emptyImg="EmptyVideo" :tip="tipEmptyMusic"/>
+    </div>
 </template>
 <script setup lang="ts">
 import Tabs from '@/components/Tabs.vue';
 import MusicTable from '@/components/MusicTable.vue';
 import ButtonList from '@/components/ButtonList.vue';
 import Filter from '@/components/Filter.vue';
-import Empty from '@/components/Empty.vue';
+import EmptyVideo from '@/components/Empty.vue';
 import { usePlayList } from '@/store/play';
 import { fuzzySearch } from '@/utils';
 import { onBeforeUnmount, ref } from 'vue';
@@ -39,6 +44,8 @@ setInitSongs(localSongs.value);
 
 const tabs = ['本地歌曲','下载歌曲','下载视频','正在下载'];
 
+const value = ref(0);
+
 const columns = [
     { key: 'sing', label: '歌手/歌名', sortable: true },
     { key: 'column', label: '专辑' },
@@ -49,7 +56,7 @@ const columns = [
 
 const batchMode = ref(false);
 
-const tipEmpty = ref('暂时没有音乐');
+const tipEmptyMusic = ref('暂时没有音乐');
 
 const filter = ref(false);
 
