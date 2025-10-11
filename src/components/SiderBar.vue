@@ -1,5 +1,9 @@
 <template>
-    <VaSidebar style="overflow: hidden;">
+  <div style="position: relative;">
+    <VaSidebar
+      v-model="showSide"
+      style="overflow: hidden; background-color: rgba(44, 130, 224, 0.1);"
+    >
       <div class="logo">
         <img src="@/assets/logo.png">
       </div>
@@ -47,6 +51,13 @@
         </VaCollapse>
       </div>
     </VaSidebar>
+    <VaButton
+      @click="showSide = !showSide;"
+      :icon="showSide? 'arrow_left' : 'arrow_right'"
+      preset="primary"
+      class="collapse"
+    />
+  </div>
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
@@ -56,6 +67,8 @@ import SideBar from '@/types/sidebar.ts';
 import { storeToRefs } from 'pinia';
 
 const page = ref('home');
+
+const showSide = ref(true);
 
 const store = useUserInfo();
 
@@ -82,5 +95,18 @@ const clickMenu = (item: SideBar) => {
 }
 img {
   height: 60px;
+}
+.collapse {
+  height: 100px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(calc(100% + 1px), -50%);
+  z-index: 99;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+:deep(.va-button--normal) {
+  min-width: 0 !important;
 }
 </style>

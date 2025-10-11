@@ -142,7 +142,7 @@ const onMin = () => {
 .conten-box {
     flex: 1;
     height: 100%;
-    max-width: calc(100vw - 256px);
+    min-width: calc(100vw - 256px);
 }
 .header {
     display: flex;

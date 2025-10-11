@@ -9,15 +9,9 @@
         <VaSelect
           v-model="filterForm.column"
           no-options-text="空白"
-          label="专辑"
-        />
-        <VaSelect
-          v-model="filterForm.directory"
-          no-options-text="空白"
-          label="文件夹"
+          label="筛选项"
         />
       </VaForm>
-      <VaButton class="confirm">确定</VaButton>
     </div>
 </template>
 <script lang="ts" setup>
@@ -31,13 +25,7 @@ const filterForm = ref({
 </script>
 <style scoped>
 .filter {
-    background-color: var(--va-background-element);
-    border-radius: 4px;
-    border: 1px solid var(--va-primary);
-    box-shadow: 0 0 2px 1px rgba(44, 130, 224, 0.35);
-    padding: 16px;
-    position: relative;
-    height: 130px;
+    padding: 16px 0;
 }
 .confirm {
     position: absolute;
@@ -49,9 +37,10 @@ const filterForm = ref({
 }
 .form {
     display: flex;
-    gap: 15px;
+    gap: 20px;
+    width: 100%;
 }
 :deep(.va-input-wrapper) {
-    max-width: calc((100% - 30px)/3);
+    width: 50%;
 }
 </style>
