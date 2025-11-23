@@ -101,8 +101,7 @@ img {
   position: absolute;
   right: 0;
   top: 50%;
-  transform: translate(calc(100% + 1px), -50%);
-  z-index: 99;
+  transform: translate(100%, -50%);
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
 }
